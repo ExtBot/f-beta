@@ -1,0 +1,10 @@
+.DS_Store
+.DS_Store?
+._*
+.Trashes
+Thumbs.db
+bot.bat
+vendor/autoload.php
+vendor/autoload_real.php
+vendor/autoload_static.php
+
