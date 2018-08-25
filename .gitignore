@@ -5,6 +5,6 @@
 Thumbs.db
 bot.bat
 vendor/autoload.php
-vendor/autoload_real.php
-vendor/autoload_static.php
+vendor/composer/autoload_real.php
+vendor/composer/autoload_static.php3
 
