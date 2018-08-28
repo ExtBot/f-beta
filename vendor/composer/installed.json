@@ -333,8 +333,8 @@
     },
     {
         "name": "symfony/console",
-        "version": "v2.8.44",
-        "version_normalized": "2.8.44.0",
+        "version": "v2.8.45",
+        "version_normalized": "2.8.45.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/console.git",
@@ -2799,8 +2799,8 @@
     },
     {
         "name": "symfony/yaml",
-        "version": "v2.8.44",
-        "version_normalized": "2.8.44.0",
+        "version": "v2.8.45",
+        "version_normalized": "2.8.45.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/yaml.git",
