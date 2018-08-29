@@ -1,23 +1,23 @@
 [
     {
         "name": "symfony/process",
-        "version": "v3.4.14",
-        "version_normalized": "3.4.14.0",
+        "version": "v3.4.15",
+        "version_normalized": "3.4.15.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/process.git",
-            "reference": "0414db29bd770ec5a4152683e655f55efd4fa60f"
+            "reference": "4d6b125d5293cbceedc2aa10f2c71617e76262e7"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/process/zipball/0414db29bd770ec5a4152683e655f55efd4fa60f",
-            "reference": "0414db29bd770ec5a4152683e655f55efd4fa60f",
+            "url": "https://api.github.com/repos/symfony/process/zipball/4d6b125d5293cbceedc2aa10f2c71617e76262e7",
+            "reference": "4d6b125d5293cbceedc2aa10f2c71617e76262e7",
             "shasum": ""
         },
         "require": {
             "php": "^5.5.9|>=7.0.8"
         },
-        "time": "2018-07-26T11:19:56+00:00",
+        "time": "2018-08-03T10:42:44+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -112,24 +112,24 @@
     },
     {
         "name": "symfony/filesystem",
-        "version": "v3.4.14",
-        "version_normalized": "3.4.14.0",
+        "version": "v3.4.15",
+        "version_normalized": "3.4.15.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/filesystem.git",
-            "reference": "a59f917e3c5d82332514cb4538387638f5bde2d6"
+            "reference": "285ce5005cb01a0aeaa5b0cf590bd0cc40bb631c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/filesystem/zipball/a59f917e3c5d82332514cb4538387638f5bde2d6",
-            "reference": "a59f917e3c5d82332514cb4538387638f5bde2d6",
+            "url": "https://api.github.com/repos/symfony/filesystem/zipball/285ce5005cb01a0aeaa5b0cf590bd0cc40bb631c",
+            "reference": "285ce5005cb01a0aeaa5b0cf590bd0cc40bb631c",
             "shasum": ""
         },
         "require": {
             "php": "^5.5.9|>=7.0.8",
             "symfony/polyfill-ctype": "~1.8"
         },
-        "time": "2018-07-26T11:19:56+00:00",
+        "time": "2018-08-10T07:29:05+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
