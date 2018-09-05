@@ -1085,37 +1085,35 @@
         "notification-url": "https://packagist.org/downloads/"
     },
     {
-        "name": "danielstjules/stringy",
-        "version": "1.10.0",
-        "version_normalized": "1.10.0.0",
+        "name": "illuminate/contracts",
+        "version": "v5.1.41",
+        "version_normalized": "5.1.41.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/danielstjules/Stringy.git",
-            "reference": "4749c205db47ee5b32e8d1adf6d9aff8db6caf3b"
+            "url": "https://github.com/illuminate/contracts.git",
+            "reference": "6e828a355b7a467232efad3dbe76df17463178e3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/danielstjules/Stringy/zipball/4749c205db47ee5b32e8d1adf6d9aff8db6caf3b",
-            "reference": "4749c205db47ee5b32e8d1adf6d9aff8db6caf3b",
+            "url": "https://api.github.com/repos/illuminate/contracts/zipball/6e828a355b7a467232efad3dbe76df17463178e3",
+            "reference": "6e828a355b7a467232efad3dbe76df17463178e3",
             "shasum": ""
         },
         "require": {
-            "ext-mbstring": "*",
-            "php": ">=5.3.0"
+            "php": ">=5.5.9"
         },
-        "require-dev": {
-            "phpunit/phpunit": "~4.0"
-        },
-        "time": "2015-07-23T00:54:12+00:00",
+        "time": "2015-09-24T11:16:48+00:00",
         "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "5.1-dev"
+            }
+        },
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "Stringy\\": "src/"
-            },
-            "files": [
-                "src/Create.php"
-            ]
+                "Illuminate\\Contracts\\": ""
+            }
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
@@ -1123,24 +1121,12 @@
         ],
         "authors": [
             {
-                "name": "Daniel St. Jules",
-                "email": "danielst.jules@gmail.com",
-                "homepage": "http://www.danielstjules.com"
+                "name": "Taylor Otwell",
+                "email": "taylorotwell@gmail.com"
             }
         ],
-        "description": "A string manipulation library with multibyte support",
-        "homepage": "https://github.com/danielstjules/Stringy",
-        "keywords": [
-            "UTF",
-            "helpers",
-            "manipulation",
-            "methods",
-            "multibyte",
-            "string",
-            "utf-8",
-            "utility",
-            "utils"
-        ]
+        "description": "The Illuminate Contracts package.",
+        "homepage": "http://laravel.com"
     },
     {
         "name": "doctrine/inflector",
@@ -1212,35 +1198,37 @@
         ]
     },
     {
-        "name": "illuminate/contracts",
-        "version": "v5.1.41",
-        "version_normalized": "5.1.41.0",
+        "name": "danielstjules/stringy",
+        "version": "1.10.0",
+        "version_normalized": "1.10.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/illuminate/contracts.git",
-            "reference": "6e828a355b7a467232efad3dbe76df17463178e3"
+            "url": "https://github.com/danielstjules/Stringy.git",
+            "reference": "4749c205db47ee5b32e8d1adf6d9aff8db6caf3b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/illuminate/contracts/zipball/6e828a355b7a467232efad3dbe76df17463178e3",
-            "reference": "6e828a355b7a467232efad3dbe76df17463178e3",
+            "url": "https://api.github.com/repos/danielstjules/Stringy/zipball/4749c205db47ee5b32e8d1adf6d9aff8db6caf3b",
+            "reference": "4749c205db47ee5b32e8d1adf6d9aff8db6caf3b",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.5.9"
+            "ext-mbstring": "*",
+            "php": ">=5.3.0"
         },
-        "time": "2015-09-24T11:16:48+00:00",
+        "require-dev": {
+            "phpunit/phpunit": "~4.0"
+        },
+        "time": "2015-07-23T00:54:12+00:00",
         "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "5.1-dev"
-            }
-        },
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "Illuminate\\Contracts\\": ""
-            }
+                "Stringy\\": "src/"
+            },
+            "files": [
+                "src/Create.php"
+            ]
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
@@ -1248,12 +1236,24 @@
         ],
         "authors": [
             {
-                "name": "Taylor Otwell",
-                "email": "taylorotwell@gmail.com"
+                "name": "Daniel St. Jules",
+                "email": "danielst.jules@gmail.com",
+                "homepage": "http://www.danielstjules.com"
             }
         ],
-        "description": "The Illuminate Contracts package.",
-        "homepage": "http://laravel.com"
+        "description": "A string manipulation library with multibyte support",
+        "homepage": "https://github.com/danielstjules/Stringy",
+        "keywords": [
+            "UTF",
+            "helpers",
+            "manipulation",
+            "methods",
+            "multibyte",
+            "string",
+            "utf-8",
+            "utility",
+            "utils"
+        ]
     },
     {
         "name": "paragonie/random_compat",
