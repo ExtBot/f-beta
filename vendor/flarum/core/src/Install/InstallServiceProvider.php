@@ -12,11 +12,12 @@
 namespace Flarum\Install;
 
 use Flarum\Foundation\AbstractServiceProvider;
-use Flarum\Http\Handler\RouteHandlerFactory;
 use Flarum\Http\RouteCollection;
+use Flarum\Http\RouteHandlerFactory;
 use Flarum\Install\Prerequisite\Composite;
 use Flarum\Install\Prerequisite\PhpExtensions;
 use Flarum\Install\Prerequisite\PhpVersion;
+use Flarum\Install\Prerequisite\PrerequisiteInterface;
 use Flarum\Install\Prerequisite\WritablePaths;
 
 class InstallServiceProvider extends AbstractServiceProvider
@@ -27,21 +28,21 @@ class InstallServiceProvider extends AbstractServiceProvider
     public function register()
     {
         $this->app->bind(
-            'Flarum\Install\Prerequisite\PrerequisiteInterface',
+            PrerequisiteInterface::class,
             function () {
                 return new Composite(
-                    new PhpVersion('5.5.0'),
+                    new PhpVersion('7.1.0'),
                     new PhpExtensions([
                         'dom',
-                        'fileinfo',
                         'gd',
                         'json',
                         'mbstring',
                         'openssl',
                         'pdo_mysql',
+                        'tokenizer',
                     ]),
                     new WritablePaths([
-                        public_path(),
+                        base_path(),
                         public_path('assets'),
                         storage_path(),
                     ])
@@ -52,8 +53,6 @@ class InstallServiceProvider extends AbstractServiceProvider
         $this->app->singleton('flarum.install.routes', function () {
             return new RouteCollection;
         });
-
-        $this->loadViewsFrom(__DIR__.'/../../views/install', 'flarum.install');
     }
 
     /**
@@ -61,6 +60,8 @@ class InstallServiceProvider extends AbstractServiceProvider
      */
     public function boot()
     {
+        $this->loadViewsFrom(__DIR__.'/../../views/install', 'flarum.install');
+
         $this->populateRoutes($this->app->make('flarum.install.routes'));
     }
 
@@ -72,13 +73,13 @@ class InstallServiceProvider extends AbstractServiceProvider
         $route = $this->app->make(RouteHandlerFactory::class);
 
         $routes->get(
-            '/',
+            '/{path:.*}',
             'index',
             $route->toController(Controller\IndexController::class)
         );
 
         $routes->post(
-            '/',
+            '/{path:.*}',
             'install',
             $route->toController(Controller\InstallController::class)
         );

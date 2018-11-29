@@ -12,13 +12,22 @@
 namespace Flarum\Install\Console;
 
 use Exception;
-use Flarum\Console\Command\AbstractCommand;
-use Flarum\Core\Group;
-use Flarum\Core\Permission;
-use Flarum\Core\User;
-use Flarum\Database\AbstractModel;
+use Flarum\Console\AbstractCommand;
+use Flarum\Database\DatabaseMigrationRepository;
+use Flarum\Database\Migrator;
+use Flarum\Extension\ExtensionManager;
+use Flarum\Foundation\Application as FlarumApplication;
+use Flarum\Foundation\Site;
+use Flarum\Group\Group;
+use Flarum\Install\Prerequisite\PrerequisiteInterface;
+use Flarum\Settings\DatabaseSettingsRepository;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Translation\Translator;
+use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Hashing\BcryptHasher;
 use Illuminate\Validation\Factory;
 use PDO;
 use Symfony\Component\Console\Input\InputOption;
@@ -39,6 +48,16 @@ class InstallCommand extends AbstractCommand
      * @var Filesystem
      */
     protected $filesystem;
+
+    /**
+     * @var ConnectionInterface
+     */
+    protected $db;
+
+    /**
+     * @var Migrator
+     */
+    protected $migrator;
 
     /**
      * @param Application $application
@@ -132,8 +151,8 @@ class InstallCommand extends AbstractCommand
                     'host' => 'required',
                     'database' => 'required|string',
                     'username' => 'required|string',
-                    'prefix' => 'alpha_dash|max:10',
-                    'port'   => 'integer|min:1|max:65535',
+                    'prefix' => 'nullable|alpha_dash|max:10',
+                    'port'   => 'nullable|integer|min:1|max:65535',
                 ]
             );
 
@@ -161,26 +180,28 @@ class InstallCommand extends AbstractCommand
                 throw new Exception('Username can only contain letters, numbers, underscores, and dashes.');
             }
 
-            $this->storeConfiguration();
-
-            $resolver = $this->application->make('Illuminate\Database\ConnectionResolverInterface');
-            AbstractModel::setConnectionResolver($resolver);
-            AbstractModel::setEventDispatcher($this->application->make('events'));
+            $this->storeConfiguration($this->dataSource->isDebugMode());
 
             $this->runMigrations();
 
             $this->writeSettings();
 
-            $this->application->register('Flarum\Core\CoreServiceProvider');
-
-            $this->seedGroups();
-            $this->seedPermissions();
-
             $this->createAdminUser();
 
-            $this->enableBundledExtensions();
-
             $this->publishAssets();
+
+            // Now that the installation of core is complete, boot up a new
+            // application instance before enabling extensions so that all of
+            // the application services are available.
+            Site::fromPaths([
+                'base' => $this->application->basePath(),
+                'public' => $this->application->publicPath(),
+                'storage' => $this->application->storagePath(),
+            ])->bootApp();
+
+            $this->application = FlarumApplication::getInstance();
+
+            $this->enableBundledExtensions();
         } catch (Exception $e) {
             @unlink($this->getConfigFile());
 
@@ -188,13 +209,13 @@ class InstallCommand extends AbstractCommand
         }
     }
 
-    protected function storeConfiguration()
+    protected function storeConfiguration(bool $debugMode)
     {
         $dbConfig = $this->dbConfig;
 
         $config = [
-            'debug'    => false,
-            'database' => [
+            'debug'    => $debugMode,
+            'database' => $laravelDbConfig = [
                 'driver'    => $dbConfig['driver'],
                 'host'      => $dbConfig['host'],
                 'database'  => $dbConfig['database'],
@@ -215,14 +236,21 @@ class InstallCommand extends AbstractCommand
 
         $this->info('Testing config');
 
-        $this->application->instance('flarum.config', $config);
-        /* @var $db \Illuminate\Database\ConnectionInterface */
-        $db = $this->application->make('flarum.db');
-        $version = $db->getPdo()->getAttribute(PDO::ATTR_SERVER_VERSION);
+        $factory = new ConnectionFactory($this->application);
+
+        $this->db = $factory->make($laravelDbConfig);
+        $version = $this->db->getPdo()->getAttribute(PDO::ATTR_SERVER_VERSION);
 
         if (version_compare($version, '5.5.0', '<')) {
             throw new Exception('MySQL version too low. You need at least MySQL 5.5.');
         }
+
+        $repository = new DatabaseMigrationRepository(
+            $this->db, 'migrations'
+        );
+        $files = $this->application->make('files');
+
+        $this->migrator = new Migrator($repository, $this->db, $files);
 
         $this->info('Writing config');
 
@@ -234,23 +262,14 @@ class InstallCommand extends AbstractCommand
 
     protected function runMigrations()
     {
-        $this->application->bind('Illuminate\Database\Schema\Builder', function ($container) {
-            return $container->make('Illuminate\Database\ConnectionInterface')->getSchemaBuilder();
-        });
-
-        $migrator = $this->application->make('Flarum\Database\Migrator');
-        $migrator->getRepository()->createRepository();
-
-        $migrator->run(__DIR__.'/../../../migrations');
-
-        foreach ($migrator->getNotes() as $note) {
-            $this->info($note);
-        }
+        $this->migrator->setOutput($this->output);
+        $this->migrator->getRepository()->createRepository();
+        $this->migrator->run(__DIR__.'/../../../migrations');
     }
 
     protected function writeSettings()
     {
-        $settings = $this->application->make('Flarum\Settings\SettingsRepositoryInterface');
+        $settings = new DatabaseSettingsRepository($this->db);
 
         $this->info('Writing default settings');
 
@@ -259,56 +278,6 @@ class InstallCommand extends AbstractCommand
         foreach ($this->settings as $k => $v) {
             $settings->set($k, $v);
         }
-    }
-
-    protected function seedGroups()
-    {
-        Group::unguard();
-
-        $groups = [
-            [Group::ADMINISTRATOR_ID, 'Admin', 'Admins', '#B72A2A', 'wrench'],
-            [Group::GUEST_ID, 'Guest', 'Guests', null, null],
-            [Group::MEMBER_ID, 'Member', 'Members', null, null],
-            [Group::MODERATOR_ID, 'Mod', 'Mods', '#80349E', 'bolt']
-        ];
-
-        foreach ($groups as $group) {
-            Group::create([
-                'id' => $group[0],
-                'name_singular' => $group[1],
-                'name_plural' => $group[2],
-                'color' => $group[3],
-                'icon' => $group[4],
-            ]);
-        }
-    }
-
-    protected function seedPermissions()
-    {
-        $permissions = [
-            // Guests can view the forum
-            [Group::GUEST_ID, 'viewDiscussions'],
-
-            // Members can create and reply to discussions, and view the user list
-            [Group::MEMBER_ID, 'startDiscussion'],
-            [Group::MEMBER_ID, 'discussion.reply'],
-            [Group::MEMBER_ID, 'viewUserList'],
-
-            // Moderators can edit + delete stuff
-            [Group::MODERATOR_ID, 'discussion.hide'],
-            [Group::MODERATOR_ID, 'discussion.editPosts'],
-            [Group::MODERATOR_ID, 'discussion.rename'],
-            [Group::MODERATOR_ID, 'discussion.viewIpsPosts'],
-        ];
-
-        foreach ($permissions as &$permission) {
-            $permission = [
-                'group_id'   => $permission[0],
-                'permission' => $permission[1]
-            ];
-        }
-
-        Permission::insert($permissions);
     }
 
     protected function createAdminUser()
@@ -321,23 +290,29 @@ class InstallCommand extends AbstractCommand
 
         $this->info('Creating admin user '.$admin['username']);
 
-        $user = User::register(
-            $admin['username'],
-            $admin['email'],
-            $admin['password']
-        );
+        $uid = $this->db->table('users')->insertGetId([
+            'username' => $admin['username'],
+            'email' => $admin['email'],
+            'password' => (new BcryptHasher)->make($admin['password']),
+            'joined_at' => time(),
+            'is_email_confirmed' => 1,
+        ]);
 
-        $user->is_activated = 1;
-        $user->save();
-
-        $user->groups()->sync([Group::ADMINISTRATOR_ID]);
+        $this->db->table('group_user')->insert([
+            'user_id' => $uid,
+            'group_id' => Group::ADMINISTRATOR_ID,
+        ]);
     }
 
     protected function enableBundledExtensions()
     {
-        $extensions = $this->application->make('Flarum\Extension\ExtensionManager');
-
-        $migrator = $extensions->getMigrator();
+        $extensions = new ExtensionManager(
+            new DatabaseSettingsRepository($this->db),
+            $this->application,
+            $this->migrator,
+            $this->application->make(Dispatcher::class),
+            $this->application->make('files')
+        );
 
         $disabled = [
             'flarum-akismet',
@@ -355,17 +330,13 @@ class InstallCommand extends AbstractCommand
             $this->info('Enabling extension: '.$name);
 
             $extensions->enable($name);
-
-            foreach ($migrator->getNotes() as $note) {
-                $this->info($note);
-            }
         }
     }
 
     protected function publishAssets()
     {
         $this->filesystem->copyDirectory(
-            $this->application->basePath().'/vendor/components/font-awesome/fonts',
+            $this->application->basePath().'/vendor/components/font-awesome/webfonts',
             $this->application->publicPath().'/assets/fonts'
         );
     }
@@ -380,7 +351,7 @@ class InstallCommand extends AbstractCommand
      */
     protected function getPrerequisites()
     {
-        return $this->application->make('Flarum\Install\Prerequisite\PrerequisiteInterface');
+        return $this->application->make(PrerequisiteInterface::class);
     }
 
     /**
@@ -388,7 +359,7 @@ class InstallCommand extends AbstractCommand
      */
     protected function getValidator()
     {
-        return new Factory($this->application->make('Symfony\Component\Translation\TranslatorInterface'));
+        return new Factory($this->application->make(Translator::class));
     }
 
     protected function showErrors($errors)

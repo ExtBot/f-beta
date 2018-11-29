@@ -11,6 +11,9 @@
 
 namespace Flarum\Extension;
 
+use Flarum\Extend\Compat;
+use Flarum\Extend\LifecycleInterface;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -37,6 +40,13 @@ use Illuminate\Support\Str;
  */
 class Extension implements Arrayable
 {
+    const LOGO_MIMETYPES = [
+        'svg' => 'image/svg+xml',
+        'png' => 'image/png',
+        'jpeg' => 'image/jpeg',
+        'jpg' => 'image/jpeg',
+    ];
+
     /**
      * Unique Id of the extension.
      *
@@ -75,13 +85,6 @@ class Extension implements Arrayable
     protected $version;
 
     /**
-     * Whether the extension is enabled.
-     *
-     * @var bool
-     */
-    protected $enabled = false;
-
-    /**
      * @param       $path
      * @param array $composerJson
      */
@@ -100,6 +103,20 @@ class Extension implements Arrayable
         list($vendor, $package) = explode('/', $this->name);
         $package = str_replace(['flarum-ext-', 'flarum-'], '', $package);
         $this->id = "$vendor-$package";
+    }
+
+    public function extend(Container $app)
+    {
+        foreach ($this->getExtenders() as $extender) {
+            // If an extension has not yet switched to the new extend.php
+            // format, it might return a function (or more of them). We wrap
+            // these in a Compat extender to enjoy an unique interface.
+            if ($extender instanceof \Closure || is_string($extender)) {
+                $extender = new Compat($extender);
+            }
+
+            $extender->extend($app, $this);
+        }
     }
 
     /**
@@ -176,41 +193,42 @@ class Extension implements Arrayable
      */
     public function getIcon()
     {
-        if (($icon = $this->composerJsonAttribute('extra.flarum-extension.icon'))) {
-            if ($file = Arr::get($icon, 'image')) {
-                $file = $this->path.'/'.$file;
+        $icon = $this->composerJsonAttribute('extra.flarum-extension.icon');
+        $file = Arr::get($icon, 'image');
 
-                if (file_exists($file)) {
-                    $mimetype = pathinfo($file, PATHINFO_EXTENSION) === 'svg'
-                        ? 'image/svg+xml'
-                        : finfo_file(finfo_open(FILEINFO_MIME_TYPE), $file);
-                    $data = file_get_contents($file);
+        if (is_null($icon) || is_null($file)) {
+            return $icon;
+        }
 
-                    $icon['backgroundImage'] = 'url(\'data:'.$mimetype.';base64,'.base64_encode($data).'\')';
-                }
+        $file = $this->path.'/'.$file;
+
+        if (file_exists($file)) {
+            $extension = pathinfo($file, PATHINFO_EXTENSION);
+            if (! array_key_exists($extension, self::LOGO_MIMETYPES)) {
+                throw new \RuntimeException('Invalid image type');
             }
 
-            return $icon;
+            $mimetype = self::LOGO_MIMETYPES[$extension];
+            $data = base64_encode(file_get_contents($file));
+
+            $icon['backgroundImage'] = "url('data:$mimetype;base64,$data')";
+        }
+
+        return $icon;
+    }
+
+    public function enable(Container $container)
+    {
+        foreach ($this->getLifecycleExtenders() as $extender) {
+            $extender->onEnable($container, $this);
         }
     }
 
-    /**
-     * @param bool $enabled
-     * @return Extension
-     */
-    public function setEnabled($enabled)
+    public function disable(Container $container)
     {
-        $this->enabled = $enabled;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isEnabled()
-    {
-        return $this->enabled;
+        foreach ($this->getLifecycleExtenders() as $extender) {
+            $extender->onDisable($container, $this);
+        }
     }
 
     /**
@@ -229,6 +247,54 @@ class Extension implements Arrayable
     public function getPath()
     {
         return $this->path;
+    }
+
+    private function getExtenders(): array
+    {
+        $extenderFile = $this->getExtenderFile();
+
+        if (! $extenderFile) {
+            return [];
+        }
+
+        $extenders = require $extenderFile;
+
+        if (! is_array($extenders)) {
+            $extenders = [$extenders];
+        }
+
+        return array_flatten($extenders);
+    }
+
+    /**
+     * @return LifecycleInterface[]
+     */
+    private function getLifecycleExtenders(): array
+    {
+        return array_filter(
+            $this->getExtenders(),
+            function ($extender) {
+                return $extender instanceof LifecycleInterface;
+            }
+        );
+    }
+
+    private function getExtenderFile(): ?string
+    {
+        $filename = "{$this->path}/extend.php";
+
+        if (file_exists($filename)) {
+            return $filename;
+        }
+
+        // To give extension authors some time to migrate to the new extension
+        // format, we will also fallback to the old bootstrap.php name. Consider
+        // this feature deprecated.
+        $deprecatedFilename = "{$this->path}/bootstrap.php";
+
+        if (file_exists($deprecatedFilename)) {
+            return $deprecatedFilename;
+        }
     }
 
     /**

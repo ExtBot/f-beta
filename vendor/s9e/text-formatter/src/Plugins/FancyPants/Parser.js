@@ -34,7 +34,7 @@ if (!config.disableSymbols)
 * @param  {!number} tagPos Position of the tag in the text
 * @param  {!number} tagLen Length of text consumed by the tag
 * @param  {!string} chr    Replacement character
-* @param  {number}  prio   Tag's priority
+* @param  {number=} prio   Tag's priority
 * @return {!Tag}
 */
 function addTag(tagPos, tagLen, chr, prio)
@@ -249,7 +249,7 @@ function parseSymbolsAfterDigits()
 	while (m = regexp.exec(text))
 	{
 		// Test for a multiply sign at the end
-		if (m[0].charAt(m[0].length - 1) === 'x')
+		if (m[0][m[0].length - 1] === 'x')
 		{
 			addTag(+m['index'] + m[0].length - 1, 1, "\u00d7");
 		}

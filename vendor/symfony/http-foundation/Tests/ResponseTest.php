@@ -33,7 +33,7 @@ class ResponseTest extends ResponseTestCase
         $response = new Response();
         $response = explode("\r\n", $response);
         $this->assertEquals('HTTP/1.0 200 OK', $response[0]);
-        $this->assertEquals('Cache-Control: no-cache', $response[1]);
+        $this->assertEquals('Cache-Control: no-cache, private', $response[1]);
     }
 
     public function testClone()
@@ -126,7 +126,7 @@ class ResponseTest extends ResponseTestCase
 
     public function testSetNotModified()
     {
-        $response = new Response();
+        $response = new Response('foo');
         $modified = $response->setNotModified();
         $this->assertObjectHasAttribute('headers', $modified);
         $this->assertObjectHasAttribute('content', $modified);
@@ -135,6 +135,11 @@ class ResponseTest extends ResponseTestCase
         $this->assertObjectHasAttribute('statusText', $modified);
         $this->assertObjectHasAttribute('charset', $modified);
         $this->assertEquals(304, $modified->getStatusCode());
+
+        ob_start();
+        $modified->sendContent();
+        $string = ob_get_clean();
+        $this->assertEmpty($string);
     }
 
     public function testIsSuccessful()
@@ -276,8 +281,10 @@ class ResponseTest extends ResponseTestCase
         $this->assertEquals($now->getTimestamp(), $date->getTimestamp(), '->getDate() returns the date when the header has been modified');
 
         $response = new Response('', 200);
+        $now = $this->createDateTimeNow();
         $response->headers->remove('Date');
-        $this->assertInstanceOf('\DateTime', $response->getDate());
+        $date = $response->getDate();
+        $this->assertEquals($now->getTimestamp(), $date->getTimestamp(), '->getDate() returns the current Date when the header has previously been removed');
     }
 
     public function testGetMaxAge()
@@ -355,6 +362,11 @@ class ResponseTest extends ResponseTestCase
         $response->headers->set('Expires', -1);
         $response->expire();
         $this->assertNull($response->headers->get('Age'), '->expire() does not set the Age when the response is expired');
+
+        $response = new Response();
+        $response->headers->set('Expires', date(DATE_RFC2822, time() + 600));
+        $response->expire();
+        $this->assertNull($response->headers->get('Expires'), '->expire() removes the Expires header when the response is fresh');
     }
 
     public function testGetTtl()
@@ -608,6 +620,12 @@ class ResponseTest extends ResponseTestCase
         $response->setCache(array('private' => false));
         $this->assertTrue($response->headers->hasCacheControlDirective('public'));
         $this->assertFalse($response->headers->hasCacheControlDirective('private'));
+
+        $response->setCache(array('immutable' => true));
+        $this->assertTrue($response->headers->hasCacheControlDirective('immutable'));
+
+        $response->setCache(array('immutable' => false));
+        $this->assertFalse($response->headers->hasCacheControlDirective('immutable'));
     }
 
     public function testSendContent()
@@ -627,6 +645,22 @@ class ResponseTest extends ResponseTestCase
 
         $this->assertTrue($response->headers->hasCacheControlDirective('public'));
         $this->assertFalse($response->headers->hasCacheControlDirective('private'));
+    }
+
+    public function testSetImmutable()
+    {
+        $response = new Response();
+        $response->setImmutable();
+
+        $this->assertTrue($response->headers->hasCacheControlDirective('immutable'));
+    }
+
+    public function testIsImmutable()
+    {
+        $response = new Response();
+        $response->setImmutable();
+
+        $this->assertTrue($response->isImmutable());
     }
 
     public function testSetExpires()
@@ -843,6 +877,16 @@ class ResponseTest extends ResponseTestCase
         }
     }
 
+    public function testNoDeprecationsAreTriggered()
+    {
+        new DefaultResponse();
+        $this->getMockBuilder(Response::class)->getMock();
+
+        // we just need to ensure that subclasses of Response can be created without any deprecations
+        // being triggered if the subclass does not override any final methods
+        $this->addToAssertionCount(1);
+    }
+
     public function validContentProvider()
     {
         return array(
@@ -892,7 +936,7 @@ class ResponseTest extends ResponseTestCase
      */
     public function ianaCodesReasonPhrasesProvider()
     {
-        if (!in_array('https', stream_get_wrappers(), true)) {
+        if (!\in_array('https', stream_get_wrappers(), true)) {
             $this->markTestSkipped('The "https" wrapper is not available');
         }
 
@@ -920,7 +964,7 @@ class ResponseTest extends ResponseTestCase
             $value = $xpath->query('.//ns:value', $record)->item(0)->nodeValue;
             $description = $xpath->query('.//ns:description', $record)->item(0)->nodeValue;
 
-            if (in_array($description, array('Unassigned', '(Unused)'), true)) {
+            if (\in_array($description, array('Unassigned', '(Unused)'), true)) {
                 continue;
             }
 
@@ -950,5 +994,20 @@ class StringableObject
     public function __toString()
     {
         return 'Foo';
+    }
+}
+
+class DefaultResponse extends Response
+{
+}
+
+class ExtendedResponse extends Response
+{
+    public function setLastModified(\DateTime $date = null)
+    {
+    }
+
+    public function getDate()
+    {
     }
 }

@@ -6,11 +6,17 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'ArithmeticError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',
+    'AssertionError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/AssertionError.php',
+    'DivisionByZeroError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/DivisionByZeroError.php',
+    'Error' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/Error.php',
+    'ParseError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/ParseError.php',
     'Pusher' => $vendorDir . '/pusher/pusher-php-server/lib/Pusher.php',
     'PusherException' => $vendorDir . '/pusher/pusher-php-server/lib/Pusher.php',
     'PusherInstance' => $vendorDir . '/pusher/pusher-php-server/lib/Pusher.php',
-    'SessionHandlerInterface' => $vendorDir . '/symfony/http-foundation/Resources/stubs/SessionHandlerInterface.php',
+    'SessionUpdateTimestampHandlerInterface' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/SessionUpdateTimestampHandlerInterface.php',
     'TijsVerkoyen\\Akismet\\Akismet' => $vendorDir . '/tijsverkoyen/akismet/Akismet.php',
     'TijsVerkoyen\\Akismet\\Exception' => $vendorDir . '/tijsverkoyen/akismet/Exception.php',
+    'TypeError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/TypeError.php',
     'lessc' => $vendorDir . '/oyejorge/less.php/lessc.inc.php',
 );

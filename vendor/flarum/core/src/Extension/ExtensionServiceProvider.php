@@ -12,6 +12,7 @@
 namespace Flarum\Extension;
 
 use Flarum\Foundation\AbstractServiceProvider;
+use Illuminate\Contracts\Container\Container;
 
 class ExtensionServiceProvider extends AbstractServiceProvider
 {
@@ -20,14 +21,25 @@ class ExtensionServiceProvider extends AbstractServiceProvider
      */
     public function register()
     {
-        $this->app->bind('flarum.extensions', 'Flarum\Extension\ExtensionManager');
+        $this->app->singleton(ExtensionManager::class);
+        $this->app->alias(ExtensionManager::class, 'flarum.extensions');
 
-        $bootstrappers = $this->app->make('flarum.extensions')->getEnabledBootstrappers();
+        // Boot extensions when the app is booting. This must be done as a boot
+        // listener on the app rather than in the service provider's boot method
+        // below, so that extensions have a chance to register things on the
+        // container before the core boot code runs.
+        $this->app->booting(function (Container $app) {
+            $app->make('flarum.extensions')->extend($app);
+        });
+    }
 
-        foreach ($bootstrappers as $file) {
-            $bootstrapper = require $file;
+    /**
+     * {@inheritdoc}
+     */
+    public function boot()
+    {
+        $events = $this->app->make('events');
 
-            $this->app->call($bootstrapper);
-        }
+        $events->subscribe(DefaultLanguagePackGuard::class);
     }
 }

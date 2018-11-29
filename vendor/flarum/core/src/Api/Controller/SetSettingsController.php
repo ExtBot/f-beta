@@ -11,16 +11,16 @@
 
 namespace Flarum\Api\Controller;
 
-use Flarum\Core\Access\AssertPermissionTrait;
-use Flarum\Event\PrepareSerializedSetting;
-use Flarum\Event\SettingWasSet;
-use Flarum\Http\Controller\ControllerInterface;
+use Flarum\Settings\Event;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\User\AssertPermissionTrait;
 use Illuminate\Contracts\Events\Dispatcher;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Zend\Diactoros\Response\EmptyResponse;
 
-class SetSettingsController implements ControllerInterface
+class SetSettingsController implements RequestHandlerInterface
 {
     use AssertPermissionTrait;
 
@@ -46,19 +46,21 @@ class SetSettingsController implements ControllerInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(ServerRequestInterface $request)
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $this->assertAdmin($request->getAttribute('actor'));
 
         $settings = $request->getParsedBody();
 
+        $this->dispatcher->dispatch(new Event\Saving($settings));
+
         foreach ($settings as $k => $v) {
-            $this->dispatcher->fire(new PrepareSerializedSetting($k, $v));
+            $this->dispatcher->dispatch(new Event\Serializing($k, $v));
 
             $this->settings->set($k, $v);
-
-            $this->dispatcher->fire(new SettingWasSet($k, $v));
         }
+
+        $this->dispatcher->dispatch(new Event\Saved($settings));
 
         return new EmptyResponse(204);
     }

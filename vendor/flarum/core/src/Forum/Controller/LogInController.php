@@ -12,21 +12,20 @@
 namespace Flarum\Forum\Controller;
 
 use Flarum\Api\Client;
-use Flarum\Api\Controller\TokenController;
-use Flarum\Core\Repository\UserRepository;
-use Flarum\Event\UserLoggedIn;
+use Flarum\Api\Controller\CreateTokenController;
 use Flarum\Http\AccessToken;
-use Flarum\Http\Controller\ControllerInterface;
 use Flarum\Http\Rememberer;
 use Flarum\Http\SessionAuthenticator;
+use Flarum\User\Event\LoggedIn;
+use Flarum\User\UserRepository;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Zend\Diactoros\Response\EmptyResponse;
-use Zend\Diactoros\Response\JsonResponse;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class LogInController implements ControllerInterface
+class LogInController implements RequestHandlerInterface
 {
     /**
-     * @var \Flarum\Core\Repository\UserRepository
+     * @var \Flarum\User\UserRepository
      */
     protected $users;
 
@@ -46,7 +45,7 @@ class LogInController implements ControllerInterface
     protected $rememberer;
 
     /**
-     * @param \Flarum\Core\Repository\UserRepository $users
+     * @param \Flarum\User\UserRepository $users
      * @param Client $apiClient
      * @param SessionAuthenticator $authenticator
      * @param Rememberer $rememberer
@@ -60,16 +59,15 @@ class LogInController implements ControllerInterface
     }
 
     /**
-     * @param Request $request
-     * @return JsonResponse|EmptyResponse
+     * {@inheritdoc}
      */
-    public function handle(Request $request)
+    public function handle(Request $request): ResponseInterface
     {
         $actor = $request->getAttribute('actor');
         $body = $request->getParsedBody();
         $params = array_only($body, ['identification', 'password']);
 
-        $response = $this->apiClient->send(TokenController::class, $actor, [], $params);
+        $response = $this->apiClient->send(CreateTokenController::class, $actor, [], $params);
 
         if ($response->getStatusCode() === 200) {
             $data = json_decode($response->getBody());
@@ -79,9 +77,11 @@ class LogInController implements ControllerInterface
 
             $token = AccessToken::find($data->token);
 
-            event(new UserLoggedIn($this->users->findOrFail($data->userId), $token));
+            event(new LoggedIn($this->users->findOrFail($data->userId), $token));
 
-            $response = $this->rememberer->remember($response, $token, ! array_get($body, 'remember'));
+            if (array_get($body, 'remember')) {
+                $response = $this->rememberer->remember($response, $token);
+            }
         }
 
         return $response;

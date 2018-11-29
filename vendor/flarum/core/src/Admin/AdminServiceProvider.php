@@ -11,12 +11,18 @@
 
 namespace Flarum\Admin;
 
-use Flarum\Event\ExtensionWasDisabled;
-use Flarum\Event\ExtensionWasEnabled;
-use Flarum\Event\SettingWasSet;
+use Flarum\Event\ConfigureMiddleware;
 use Flarum\Foundation\AbstractServiceProvider;
-use Flarum\Http\Handler\RouteHandlerFactory;
+use Flarum\Foundation\Application;
+use Flarum\Frontend\AddLocaleAssets;
+use Flarum\Frontend\AddTranslations;
+use Flarum\Frontend\Compiler\Source\SourceCollector;
+use Flarum\Frontend\RecompileFrontendAssets;
+use Flarum\Http\Middleware as HttpMiddleware;
 use Flarum\Http\RouteCollection;
+use Flarum\Http\RouteHandlerFactory;
+use Flarum\Http\UrlGenerator;
+use Zend\Stratigility\MiddlewarePipe;
 
 class AdminServiceProvider extends AbstractServiceProvider
 {
@@ -25,12 +31,65 @@ class AdminServiceProvider extends AbstractServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(UrlGenerator::class, function () {
-            return new UrlGenerator($this->app, $this->app->make('flarum.admin.routes'));
+        $this->app->extend(UrlGenerator::class, function (UrlGenerator $url) {
+            return $url->addCollection('admin', $this->app->make('flarum.admin.routes'), 'admin');
         });
 
         $this->app->singleton('flarum.admin.routes', function () {
             return new RouteCollection;
+        });
+
+        $this->app->singleton('flarum.admin.middleware', function (Application $app) {
+            $pipe = new MiddlewarePipe;
+
+            // All requests should first be piped through our global error handler
+            if ($app->inDebugMode()) {
+                $pipe->pipe($app->make(HttpMiddleware\HandleErrorsWithWhoops::class));
+            } else {
+                $pipe->pipe($app->make(HttpMiddleware\HandleErrorsWithView::class));
+            }
+
+            $pipe->pipe($app->make(HttpMiddleware\ParseJsonBody::class));
+            $pipe->pipe($app->make(HttpMiddleware\StartSession::class));
+            $pipe->pipe($app->make(HttpMiddleware\RememberFromCookie::class));
+            $pipe->pipe($app->make(HttpMiddleware\AuthenticateWithSession::class));
+            $pipe->pipe($app->make(HttpMiddleware\SetLocale::class));
+            $pipe->pipe($app->make(Middleware\RequireAdministrateAbility::class));
+
+            event(new ConfigureMiddleware($pipe, 'admin'));
+
+            return $pipe;
+        });
+
+        $this->app->afterResolving('flarum.admin.middleware', function (MiddlewarePipe $pipe) {
+            $pipe->pipe(new HttpMiddleware\DispatchRoute($this->app->make('flarum.admin.routes')));
+        });
+
+        $this->app->bind('flarum.assets.admin', function () {
+            /** @var \Flarum\Frontend\Assets $assets */
+            $assets = $this->app->make('flarum.assets.factory')('admin');
+
+            $assets->js(function (SourceCollector $sources) {
+                $sources->addFile(__DIR__.'/../../js/dist/admin.js');
+            });
+
+            $assets->css(function (SourceCollector $sources) {
+                $sources->addFile(__DIR__.'/../../less/admin.less');
+            });
+
+            $this->app->make(AddTranslations::class)->forFrontend('admin')->to($assets);
+            $this->app->make(AddLocaleAssets::class)->to($assets);
+
+            return $assets;
+        });
+
+        $this->app->bind('flarum.frontend.admin', function () {
+            /** @var \Flarum\Frontend\Frontend $frontend */
+            $frontend = $this->app->make('flarum.frontend.factory')('admin');
+
+            $frontend->content($this->app->make(Content\AdminPayload::class));
+
+            return $frontend;
         });
     }
 
@@ -43,54 +102,22 @@ class AdminServiceProvider extends AbstractServiceProvider
 
         $this->loadViewsFrom(__DIR__.'/../../views', 'flarum.admin');
 
-        $this->flushWebAppAssetsWhenThemeChanged();
-
-        $this->flushWebAppAssetsWhenExtensionsChanged();
+        $this->app->make('events')->subscribe(
+            new RecompileFrontendAssets(
+                $this->app->make('flarum.assets.admin'),
+                $this->app->make('flarum.locales')
+            )
+        );
     }
 
     /**
-     * Populate the forum client routes.
-     *
      * @param RouteCollection $routes
      */
     protected function populateRoutes(RouteCollection $routes)
     {
-        $route = $this->app->make(RouteHandlerFactory::class);
+        $factory = $this->app->make(RouteHandlerFactory::class);
 
-        $routes->get(
-            '/',
-            'index',
-            $route->toController(Controller\WebAppController::class)
-        );
-    }
-
-    protected function flushWebAppAssetsWhenThemeChanged()
-    {
-        $this->app->make('events')->listen(SettingWasSet::class, function (SettingWasSet $event) {
-            if (preg_match('/^theme_|^custom_less$/i', $event->key)) {
-                $this->getWebAppAssets()->flushCss();
-            }
-        });
-    }
-
-    protected function flushWebAppAssetsWhenExtensionsChanged()
-    {
-        $events = $this->app->make('events');
-
-        $events->listen(ExtensionWasEnabled::class, [$this, 'flushWebAppAssets']);
-        $events->listen(ExtensionWasDisabled::class, [$this, 'flushWebAppAssets']);
-    }
-
-    public function flushWebAppAssets()
-    {
-        $this->getWebAppAssets()->flush();
-    }
-
-    /**
-     * @return \Flarum\Http\WebApp\WebAppAssets
-     */
-    protected function getWebAppAssets()
-    {
-        return $this->app->make(WebApp::class)->getAssets();
+        $callback = include __DIR__.'/routes.php';
+        $callback($routes, $factory);
     }
 }

@@ -11,18 +11,19 @@
 
 namespace Flarum\Api\Controller;
 
+use Flarum\Api\Event\WillGetData;
+use Flarum\Api\Event\WillSerializeData;
 use Flarum\Api\JsonApiResponse;
-use Flarum\Event\ConfigureApiController;
-use Flarum\Event\PrepareApiData;
-use Flarum\Http\Controller\ControllerInterface;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Events\Dispatcher;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Tobscure\JsonApi\Document;
 use Tobscure\JsonApi\Parameters;
 use Tobscure\JsonApi\SerializerInterface;
 
-abstract class AbstractSerializeController implements ControllerInterface
+abstract class AbstractSerializeController implements RequestHandlerInterface
 {
     /**
      * The name of the serializer class to output results with.
@@ -86,18 +87,18 @@ abstract class AbstractSerializeController implements ControllerInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(ServerRequestInterface $request)
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $document = new Document;
 
-        static::$events->fire(
-            new ConfigureApiController($this)
+        static::$events->dispatch(
+            new WillGetData($this)
         );
 
         $data = $this->data($request, $document);
 
-        static::$events->fire(
-            new PrepareApiData($this, $data, $request, $document)
+        static::$events->dispatch(
+            new WillSerializeData($this, $data, $request, $document)
         );
 
         $serializer = static::$container->make($this->serializer);

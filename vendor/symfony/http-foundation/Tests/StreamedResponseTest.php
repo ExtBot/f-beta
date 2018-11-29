@@ -93,15 +93,6 @@ class StreamedResponseTest extends TestCase
     /**
      * @expectedException \LogicException
      */
-    public function testSetCallbackNonCallable()
-    {
-        $response = new StreamedResponse(null);
-        $response->setCallback(null);
-    }
-
-    /**
-     * @expectedException \LogicException
-     */
     public function testSetContent()
     {
         $response = new StreamedResponse(function () { echo 'foo'; });
@@ -131,5 +122,23 @@ class StreamedResponseTest extends TestCase
         $response = new StreamedResponse(function () {});
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\StreamedResponse', $response->sendHeaders());
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\StreamedResponse', $response->sendHeaders());
+    }
+
+    public function testSetNotModified()
+    {
+        $response = new StreamedResponse(function () { echo 'foo'; });
+        $modified = $response->setNotModified();
+        $this->assertObjectHasAttribute('headers', $modified);
+        $this->assertObjectHasAttribute('content', $modified);
+        $this->assertObjectHasAttribute('version', $modified);
+        $this->assertObjectHasAttribute('statusCode', $modified);
+        $this->assertObjectHasAttribute('statusText', $modified);
+        $this->assertObjectHasAttribute('charset', $modified);
+        $this->assertEquals(304, $modified->getStatusCode());
+
+        ob_start();
+        $modified->sendContent();
+        $string = ob_get_clean();
+        $this->assertEmpty($string);
     }
 }

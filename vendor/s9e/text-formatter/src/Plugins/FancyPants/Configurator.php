@@ -2,7 +2,7 @@
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2016 The s9e Authors
+* @copyright Copyright (c) 2010-2018 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Plugins\FancyPants;
@@ -10,7 +10,7 @@ use s9e\TextFormatter\Plugins\ConfiguratorBase;
 class Configurator extends ConfiguratorBase
 {
 	protected $attrName = 'char';
-	protected $disabledPasses = array();
+	protected $disabledPasses = [];
 	protected $tagName = 'FP';
 	protected function setUp()
 	{
@@ -32,10 +32,10 @@ class Configurator extends ConfiguratorBase
 	}
 	public function asConfig()
 	{
-		$config = array(
+		$config = [
 			'attrName' => $this->attrName,
 			'tagName'  => $this->tagName
-		);
+		];
 		foreach ($this->disabledPasses as $passName)
 			$config['disable' . $passName] = \true;
 		return $config;

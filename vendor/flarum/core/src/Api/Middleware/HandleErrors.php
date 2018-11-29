@@ -11,12 +11,14 @@
 
 namespace Flarum\Api\Middleware;
 
-use Exception;
 use Flarum\Api\ErrorHandler;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Server\MiddlewareInterface as Middleware;
+use Psr\Http\Server\RequestHandlerInterface as Handler;
+use Throwable;
 
-class HandleErrors
+class HandleErrors implements Middleware
 {
     /**
      * @var ErrorHandler
@@ -33,17 +35,12 @@ class HandleErrors
 
     /**
      * Catch all errors that happen during further middleware execution.
-     *
-     * @param Request $request
-     * @param Response $response
-     * @param callable $out
-     * @return Response
      */
-    public function __invoke(Request $request, Response $response, callable $out = null)
+    public function process(Request $request, Handler $handler): Response
     {
         try {
-            return $out($request, $response);
-        } catch (Exception $e) {
+            return $handler->handle($request);
+        } catch (Throwable $e) {
             return $this->errorHandler->handle($e);
         }
     }
