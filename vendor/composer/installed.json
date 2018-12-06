@@ -1564,17 +1564,17 @@
     },
     {
         "name": "guzzlehttp/psr7",
-        "version": "1.5.0",
-        "version_normalized": "1.5.0.0",
+        "version": "1.5.2",
+        "version_normalized": "1.5.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/guzzle/psr7.git",
-            "reference": "53662d6688033a5eccde987bdd5a4a98ebe2d952"
+            "reference": "9f83dded91781a01c63574e387eaa769be769115"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/guzzle/psr7/zipball/53662d6688033a5eccde987bdd5a4a98ebe2d952",
-            "reference": "53662d6688033a5eccde987bdd5a4a98ebe2d952",
+            "url": "https://api.github.com/repos/guzzle/psr7/zipball/9f83dded91781a01c63574e387eaa769be769115",
+            "reference": "9f83dded91781a01c63574e387eaa769be769115",
             "shasum": ""
         },
         "require": {
@@ -1588,7 +1588,7 @@
         "require-dev": {
             "phpunit/phpunit": "~4.8.36 || ^5.7.27 || ^6.5.8"
         },
-        "time": "2018-12-03T05:07:51+00:00",
+        "time": "2018-12-04T20:46:45+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -3430,17 +3430,17 @@
     },
     {
         "name": "egulias/email-validator",
-        "version": "2.1.6",
-        "version_normalized": "2.1.6.0",
+        "version": "2.1.7",
+        "version_normalized": "2.1.7.0",
         "source": {
             "type": "git",
             "url": "https://github.com/egulias/EmailValidator.git",
-            "reference": "0578b32b30b22de3e8664f797cf846fc9246f786"
+            "reference": "709f21f92707308cdf8f9bcfa1af4cb26586521e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/0578b32b30b22de3e8664f797cf846fc9246f786",
-            "reference": "0578b32b30b22de3e8664f797cf846fc9246f786",
+            "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/709f21f92707308cdf8f9bcfa1af4cb26586521e",
+            "reference": "709f21f92707308cdf8f9bcfa1af4cb26586521e",
             "shasum": ""
         },
         "require": {
@@ -3455,7 +3455,7 @@
         "suggest": {
             "ext-intl": "PHP Internationalization Libraries are required to use the SpoofChecking validation"
         },
-        "time": "2018-09-25T20:47:26+00:00",
+        "time": "2018-12-04T22:38:24+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -4198,17 +4198,17 @@
     },
     {
         "name": "doctrine/dbal",
-        "version": "v2.8.0",
-        "version_normalized": "2.8.0.0",
+        "version": "v2.9.0",
+        "version_normalized": "2.9.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/doctrine/dbal.git",
-            "reference": "5140a64c08b4b607b9bedaae0cedd26f04a0e621"
+            "reference": "21fdabe2fc01e004e1966f200d900554876bc63c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/doctrine/dbal/zipball/5140a64c08b4b607b9bedaae0cedd26f04a0e621",
-            "reference": "5140a64c08b4b607b9bedaae0cedd26f04a0e621",
+            "url": "https://api.github.com/repos/doctrine/dbal/zipball/21fdabe2fc01e004e1966f200d900554876bc63c",
+            "reference": "21fdabe2fc01e004e1966f200d900554876bc63c",
             "shasum": ""
         },
         "require": {
@@ -4218,32 +4218,31 @@
             "php": "^7.1"
         },
         "require-dev": {
-            "doctrine/coding-standard": "^4.0",
+            "doctrine/coding-standard": "^5.0",
             "jetbrains/phpstorm-stubs": "^2018.1.2",
             "phpstan/phpstan": "^0.10.1",
-            "phpunit/phpunit": "^7.1.2",
-            "phpunit/phpunit-mock-objects": "!=3.2.4,!=3.2.5",
+            "phpunit/phpunit": "^7.4",
             "symfony/console": "^2.0.5|^3.0|^4.0",
             "symfony/phpunit-bridge": "^3.4.5|^4.0.5"
         },
         "suggest": {
             "symfony/console": "For helpful console commands such as SQL execution and import of files."
         },
-        "time": "2018-07-13T03:16:35+00:00",
+        "time": "2018-12-04T04:39:48+00:00",
         "bin": [
             "bin/doctrine-dbal"
         ],
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "2.8.x-dev",
+                "dev-master": "2.9.x-dev",
                 "dev-develop": "3.0.x-dev"
             }
         },
         "installation-source": "dist",
         "autoload": {
-            "psr-0": {
-                "Doctrine\\DBAL\\": "lib/"
+            "psr-4": {
+                "Doctrine\\DBAL\\": "lib/Doctrine/DBAL"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -4268,28 +4267,32 @@
                 "email": "jonwage@gmail.com"
             }
         ],
-        "description": "Database Abstraction Layer",
-        "homepage": "http://www.doctrine-project.org",
+        "description": "Powerful PHP database abstraction layer (DBAL) with many features for database schema introspection and management.",
+        "homepage": "https://www.doctrine-project.org/projects/dbal.html",
         "keywords": [
+            "abstraction",
             "database",
             "dbal",
+            "mysql",
             "persistence",
+            "pgsql",
+            "php",
             "queryobject"
         ]
     },
     {
         "name": "flarum/core",
-        "version": "v0.1.0-beta.8",
-        "version_normalized": "0.1.0.0-beta8",
+        "version": "v0.1.0-beta.8.1",
+        "version_normalized": "0.1.0.0-beta8.1",
         "source": {
             "type": "git",
             "url": "https://github.com/flarum/core.git",
-            "reference": "213fd62be312890d609222b83e4941115dbfc8be"
+            "reference": "bbe62f400fd849f1f86ce7a4931c59fab4aec6fc"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/flarum/core/zipball/213fd62be312890d609222b83e4941115dbfc8be",
-            "reference": "213fd62be312890d609222b83e4941115dbfc8be",
+            "url": "https://api.github.com/repos/flarum/core/zipball/bbe62f400fd849f1f86ce7a4931c59fab4aec6fc",
+            "reference": "bbe62f400fd849f1f86ce7a4931c59fab4aec6fc",
             "shasum": ""
         },
         "require": {
@@ -4340,7 +4343,7 @@
             "mockery/mockery": "^0.9.4",
             "phpunit/phpunit": "^6.0"
         },
-        "time": "2018-11-28T23:34:49+00:00",
+        "time": "2018-12-05T23:47:38+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -4719,7 +4722,8 @@
         "description": "Allow users to flag posts for moderator review.",
         "keywords": [
             "moderation"
-        ]
+        ],
+        "abandoned": "flarum/flags"
     },
     {
         "name": "flarum/flarum-ext-approval",
@@ -4774,7 +4778,8 @@
         "description": "Make discussions and posts require moderator approval.",
         "keywords": [
             "moderation"
-        ]
+        ],
+        "abandoned": "flarum/approval"
     },
     {
         "name": "flarum/flarum-ext-akismet",
@@ -4831,7 +4836,8 @@
         "description": "Stop spam using the Akismet anti-spam service.",
         "keywords": [
             "moderation"
-        ]
+        ],
+        "abandoned": "flarum/akismet"
     },
     {
         "name": "league/oauth2-facebook",
@@ -4939,7 +4945,8 @@
         "description": "Allow users to log in with Facebook.",
         "keywords": [
             "Authentication"
-        ]
+        ],
+        "abandoned": "flarum/auth-facebook"
     },
     {
         "name": "league/oauth2-github",
@@ -5052,7 +5059,8 @@
         "description": "Allow users to log in with GitHub.",
         "keywords": [
             "Authentication"
-        ]
+        ],
+        "abandoned": "flarum/auth-github"
     },
     {
         "name": "league/oauth1-client",
@@ -5172,7 +5180,8 @@
         "description": "Allow users to log in with Twitter.",
         "keywords": [
             "Authentication"
-        ]
+        ],
+        "abandoned": "flarum/auth-twitter"
     },
     {
         "name": "flarum/flarum-ext-bbcode",
@@ -5226,7 +5235,8 @@
         "description": "Allow posts to be formatted with BBCode.",
         "keywords": [
             "formatting"
-        ]
+        ],
+        "abandoned": "flarum/bbcode"
     },
     {
         "name": "flarum/flarum-ext-emoji",
@@ -5279,7 +5289,8 @@
         "description": "Convert text and unicode emoji into Twemoji.",
         "keywords": [
             "formatting"
-        ]
+        ],
+        "abandoned": "flarum/emoji"
     },
     {
         "name": "flarum/flarum-ext-english",
@@ -5327,7 +5338,8 @@
         "description": "English language pack.",
         "keywords": [
             "locale"
-        ]
+        ],
+        "abandoned": "flarum/lang-english"
     },
     {
         "name": "flarum/flarum-ext-likes",
@@ -5381,7 +5393,8 @@
         "description": "Allow users to like posts.",
         "keywords": [
             "discussion"
-        ]
+        ],
+        "abandoned": "flarum/likes"
     },
     {
         "name": "flarum/flarum-ext-lock",
@@ -5435,7 +5448,8 @@
         "description": "End a discussion and don't let anyone add further replies.",
         "keywords": [
             "moderation"
-        ]
+        ],
+        "abandoned": "flarum/lock"
     },
     {
         "name": "flarum/flarum-ext-markdown",
@@ -5492,7 +5506,8 @@
         "description": "Allow posts to be formatted with Markdown.",
         "keywords": [
             "formatting"
-        ]
+        ],
+        "abandoned": "flarum/markdown"
     },
     {
         "name": "flarum/flarum-ext-mentions",
@@ -5546,7 +5561,8 @@
         "description": "Mention and reply to specific posts and users.",
         "keywords": [
             "discussion"
-        ]
+        ],
+        "abandoned": "flarum/mentions"
     },
     {
         "name": "pusher/pusher-php-server",
@@ -5650,7 +5666,8 @@
         "description": "See new discussions and posts in real-time using Pusher.",
         "keywords": [
             "discussion"
-        ]
+        ],
+        "abandoned": "flarum/pusher"
     },
     {
         "name": "flarum/flarum-ext-sticky",
@@ -5704,7 +5721,8 @@
         "description": "Pin discussions to the top of the list.",
         "keywords": [
             "discussion"
-        ]
+        ],
+        "abandoned": "flarum/sticky"
     },
     {
         "name": "flarum/flarum-ext-subscriptions",
@@ -5758,7 +5776,8 @@
         "description": "Allow users to follow discussions and receive notifications for new posts.",
         "keywords": [
             "discussion"
-        ]
+        ],
+        "abandoned": "flarum/subscriptions"
     },
     {
         "name": "flarum/flarum-ext-suspend",
@@ -5812,7 +5831,8 @@
         "description": "Suspend users so they can't post.",
         "keywords": [
             "moderation"
-        ]
+        ],
+        "abandoned": "flarum/suspend"
     },
     {
         "name": "flarum/flarum-ext-tags",
@@ -5866,6 +5886,7 @@
         "description": "Organize discussions into a hierarchy of tags and categories.",
         "keywords": [
             "discussion"
-        ]
+        ],
+        "abandoned": "flarum/tags"
     }
 ]

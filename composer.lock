@@ -346,16 +346,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "v2.8.0",
+            "version": "v2.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "5140a64c08b4b607b9bedaae0cedd26f04a0e621"
+                "reference": "21fdabe2fc01e004e1966f200d900554876bc63c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/5140a64c08b4b607b9bedaae0cedd26f04a0e621",
-                "reference": "5140a64c08b4b607b9bedaae0cedd26f04a0e621",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/21fdabe2fc01e004e1966f200d900554876bc63c",
+                "reference": "21fdabe2fc01e004e1966f200d900554876bc63c",
                 "shasum": ""
             },
             "require": {
@@ -365,11 +365,10 @@
                 "php": "^7.1"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^4.0",
+                "doctrine/coding-standard": "^5.0",
                 "jetbrains/phpstorm-stubs": "^2018.1.2",
                 "phpstan/phpstan": "^0.10.1",
-                "phpunit/phpunit": "^7.1.2",
-                "phpunit/phpunit-mock-objects": "!=3.2.4,!=3.2.5",
+                "phpunit/phpunit": "^7.4",
                 "symfony/console": "^2.0.5|^3.0|^4.0",
                 "symfony/phpunit-bridge": "^3.4.5|^4.0.5"
             },
@@ -382,13 +381,13 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.8.x-dev",
+                    "dev-master": "2.9.x-dev",
                     "dev-develop": "3.0.x-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Doctrine\\DBAL\\": "lib/"
+                "psr-4": {
+                    "Doctrine\\DBAL\\": "lib/Doctrine/DBAL"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -413,15 +412,19 @@
                     "email": "jonwage@gmail.com"
                 }
             ],
-            "description": "Database Abstraction Layer",
-            "homepage": "http://www.doctrine-project.org",
+            "description": "Powerful PHP database abstraction layer (DBAL) with many features for database schema introspection and management.",
+            "homepage": "https://www.doctrine-project.org/projects/dbal.html",
             "keywords": [
+                "abstraction",
                 "database",
                 "dbal",
+                "mysql",
                 "persistence",
+                "pgsql",
+                "php",
                 "queryobject"
             ],
-            "time": "2018-07-13T03:16:35+00:00"
+            "time": "2018-12-04T04:39:48+00:00"
         },
         {
             "name": "doctrine/event-manager",
@@ -620,16 +623,16 @@
         },
         {
             "name": "egulias/email-validator",
-            "version": "2.1.6",
+            "version": "2.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/egulias/EmailValidator.git",
-                "reference": "0578b32b30b22de3e8664f797cf846fc9246f786"
+                "reference": "709f21f92707308cdf8f9bcfa1af4cb26586521e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/0578b32b30b22de3e8664f797cf846fc9246f786",
-                "reference": "0578b32b30b22de3e8664f797cf846fc9246f786",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/709f21f92707308cdf8f9bcfa1af4cb26586521e",
+                "reference": "709f21f92707308cdf8f9bcfa1af4cb26586521e",
                 "shasum": ""
             },
             "require": {
@@ -673,7 +676,7 @@
                 "validation",
                 "validator"
             ],
-            "time": "2018-09-25T20:47:26+00:00"
+            "time": "2018-12-04T22:38:24+00:00"
         },
         {
             "name": "erusev/parsedown",
@@ -834,16 +837,16 @@
         },
         {
             "name": "flarum/core",
-            "version": "v0.1.0-beta.8",
+            "version": "v0.1.0-beta.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/flarum/core.git",
-                "reference": "213fd62be312890d609222b83e4941115dbfc8be"
+                "reference": "bbe62f400fd849f1f86ce7a4931c59fab4aec6fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/flarum/core/zipball/213fd62be312890d609222b83e4941115dbfc8be",
-                "reference": "213fd62be312890d609222b83e4941115dbfc8be",
+                "url": "https://api.github.com/repos/flarum/core/zipball/bbe62f400fd849f1f86ce7a4931c59fab4aec6fc",
+                "reference": "bbe62f400fd849f1f86ce7a4931c59fab4aec6fc",
                 "shasum": ""
             },
             "require": {
@@ -928,7 +931,7 @@
                 "discussion",
                 "forum"
             ],
-            "time": "2018-11-28T23:34:49+00:00"
+            "time": "2018-12-05T23:47:38+00:00"
         },
         {
             "name": "flarum/flarum-ext-akismet",
@@ -983,6 +986,7 @@
             "keywords": [
                 "moderation"
             ],
+            "abandoned": "flarum/akismet",
             "time": "2016-10-19T10:42:05+00:00"
         },
         {
@@ -1036,6 +1040,7 @@
             "keywords": [
                 "moderation"
             ],
+            "abandoned": "flarum/approval",
             "time": "2017-07-22T02:52:03+00:00"
         },
         {
@@ -1089,6 +1094,7 @@
             "keywords": [
                 "Authentication"
             ],
+            "abandoned": "flarum/auth-facebook",
             "time": "2016-10-19T10:42:20+00:00"
         },
         {
@@ -1142,6 +1148,7 @@
             "keywords": [
                 "Authentication"
             ],
+            "abandoned": "flarum/auth-github",
             "time": "2016-10-19T10:42:27+00:00"
         },
         {
@@ -1195,6 +1202,7 @@
             "keywords": [
                 "Authentication"
             ],
+            "abandoned": "flarum/auth-twitter",
             "time": "2016-10-19T10:42:36+00:00"
         },
         {
@@ -1247,6 +1255,7 @@
             "keywords": [
                 "formatting"
             ],
+            "abandoned": "flarum/bbcode",
             "time": "2016-03-29T08:14:20+00:00"
         },
         {
@@ -1298,6 +1307,7 @@
             "keywords": [
                 "formatting"
             ],
+            "abandoned": "flarum/emoji",
             "time": "2016-10-19T10:42:56+00:00"
         },
         {
@@ -1344,6 +1354,7 @@
             "keywords": [
                 "locale"
             ],
+            "abandoned": "flarum/lang-english",
             "time": "2018-11-22T06:02:09+00:00"
         },
         {
@@ -1396,6 +1407,7 @@
             "keywords": [
                 "moderation"
             ],
+            "abandoned": "flarum/flags",
             "time": "2017-07-22T02:50:24+00:00"
         },
         {
@@ -1448,6 +1460,7 @@
             "keywords": [
                 "discussion"
             ],
+            "abandoned": "flarum/likes",
             "time": "2016-10-19T10:43:14+00:00"
         },
         {
@@ -1500,6 +1513,7 @@
             "keywords": [
                 "moderation"
             ],
+            "abandoned": "flarum/lock",
             "time": "2017-07-22T02:48:15+00:00"
         },
         {
@@ -1555,6 +1569,7 @@
             "keywords": [
                 "formatting"
             ],
+            "abandoned": "flarum/markdown",
             "time": "2016-03-29T08:17:28+00:00"
         },
         {
@@ -1607,6 +1622,7 @@
             "keywords": [
                 "discussion"
             ],
+            "abandoned": "flarum/mentions",
             "time": "2017-06-28T22:56:15+00:00"
         },
         {
@@ -1663,6 +1679,7 @@
             "keywords": [
                 "discussion"
             ],
+            "abandoned": "flarum/pusher",
             "time": "2016-10-19T10:43:35+00:00"
         },
         {
@@ -1715,6 +1732,7 @@
             "keywords": [
                 "discussion"
             ],
+            "abandoned": "flarum/sticky",
             "time": "2017-07-22T02:47:30+00:00"
         },
         {
@@ -1767,6 +1785,7 @@
             "keywords": [
                 "discussion"
             ],
+            "abandoned": "flarum/subscriptions",
             "time": "2016-10-19T10:43:45+00:00"
         },
         {
@@ -1819,6 +1838,7 @@
             "keywords": [
                 "moderation"
             ],
+            "abandoned": "flarum/suspend",
             "time": "2017-07-22T02:46:24+00:00"
         },
         {
@@ -1871,6 +1891,7 @@
             "keywords": [
                 "discussion"
             ],
+            "abandoned": "flarum/tags",
             "time": "2017-07-22T02:45:22+00:00"
         },
         {
@@ -2021,16 +2042,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "1.5.0",
+            "version": "1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "53662d6688033a5eccde987bdd5a4a98ebe2d952"
+                "reference": "9f83dded91781a01c63574e387eaa769be769115"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/53662d6688033a5eccde987bdd5a4a98ebe2d952",
-                "reference": "53662d6688033a5eccde987bdd5a4a98ebe2d952",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/9f83dded91781a01c63574e387eaa769be769115",
+                "reference": "9f83dded91781a01c63574e387eaa769be769115",
                 "shasum": ""
             },
             "require": {
@@ -2084,7 +2105,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2018-12-03T05:07:51+00:00"
+            "time": "2018-12-04T20:46:45+00:00"
         },
         {
             "name": "illuminate/bus",
