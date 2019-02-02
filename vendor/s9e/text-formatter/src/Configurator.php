@@ -2,7 +2,7 @@
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter;
@@ -115,7 +115,6 @@ class Configurator implements ConfigProvider
 	}
 	public function asConfig()
 	{
-		$this->plugins->finalize();
 		$properties = \get_object_vars($this);
 		unset($properties['attributeFilters']);
 		unset($properties['bundleGenerator']);
@@ -152,7 +151,7 @@ class Configurator implements ConfigProvider
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator;
@@ -182,7 +181,7 @@ class BundleGenerator
 		$php = [];
 		$php[] = '/**';
 		$php[] = '* @package   s9e\TextFormatter';
-		$php[] = '* @copyright Copyright (c) 2010-2018 The s9e Authors';
+		$php[] = '* @copyright Copyright (c) 2010-2019 The s9e Authors';
 		$php[] = '* @license   http://www.opensource.org/licenses/mit-license.php The MIT License';
 		$php[] = '*/';
 		if ($namespace)
@@ -298,7 +297,7 @@ class BundleGenerator
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator;
@@ -309,7 +308,7 @@ interface ConfigProvider
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator;
@@ -320,7 +319,7 @@ interface FilterableConfigValue
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Helpers;
@@ -330,52 +329,15 @@ abstract class AVTHelper
 {
 	public static function parse($attrValue)
 	{
+		\preg_match_all('(\\{\\{|\\{(?:[^\'"}]|\'[^\']*\'|"[^"]*")+\\}|\\{|[^{]++)', $attrValue, $matches);
 		$tokens  = [];
-		$attrLen = \strlen($attrValue);
-		$pos = 0;
-		while ($pos < $attrLen)
-		{
-			if ($attrValue[$pos] === '{')
-			{
-				if (\substr($attrValue, $pos, 2) === '{{')
-				{
-					$tokens[] = ['literal', '{'];
-					$pos += 2;
-					continue;
-				}
-				++$pos;
-				$expr = '';
-				while ($pos < $attrLen)
-				{
-					$spn = \strcspn($attrValue, '\'"}', $pos);
-					if ($spn)
-					{
-						$expr .= \substr($attrValue, $pos, $spn);
-						$pos += $spn;
-					}
-					if ($pos >= $attrLen)
-						throw new RuntimeException('Unterminated XPath expression');
-					$c = $attrValue[$pos];
-					++$pos;
-					if ($c === '}')
-						break;
-					$quotePos = \strpos($attrValue, $c, $pos);
-					if ($quotePos === \false)
-						throw new RuntimeException('Unterminated XPath expression');
-					$expr .= $c . \substr($attrValue, $pos, $quotePos + 1 - $pos);
-					$pos = 1 + $quotePos;
-				}
-				$tokens[] = ['expression', $expr];
-			}
-			$spn = \strcspn($attrValue, '{', $pos);
-			if ($spn)
-			{
-				$str = \substr($attrValue, $pos, $spn);
-				$str = \str_replace('}}', '}', $str);
-				$tokens[] = ['literal', $str];
-				$pos += $spn;
-			}
-		}
+		foreach ($matches[0] as $str)
+			if ($str === '{{' || $str === '{')
+				$tokens[] = ['literal', '{'];
+			elseif ($str[0] === '{')
+				$tokens[] = ['expression', \substr($str, 1, -1)];
+			else
+				$tokens[] = ['literal', \str_replace('}}', '}', $str)];
 		return $tokens;
 	}
 	public static function replace(DOMAttr $attribute, callable $callback)
@@ -416,7 +378,7 @@ abstract class AVTHelper
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Helpers;
@@ -521,7 +483,7 @@ class CharacterClassBuilder
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Helpers;
@@ -622,7 +584,7 @@ abstract class ConfigHelper
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Helpers;
@@ -831,7 +793,7 @@ class ElementInspector
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Helpers;
@@ -841,7 +803,7 @@ abstract class NodeLocator
 {
 	public static function getAttributesByRegexp(DOMDocument $dom, $regexp)
 	{
-		return self::getNodesByRegexp($dom, $regexp, 'attribute', '@');
+		return self::getNodesByRegexp($dom, $regexp, 'attribute');
 	}
 	public static function getCSSNodes(DOMDocument $dom)
 	{
@@ -854,7 +816,7 @@ abstract class NodeLocator
 	}
 	public static function getElementsByRegexp(DOMDocument $dom, $regexp)
 	{
-		return self::getNodesByRegexp($dom, $regexp, 'element', '');
+		return self::getNodesByRegexp($dom, $regexp, 'element');
 	}
 	public static function getJSNodes(DOMDocument $dom)
 	{
@@ -894,19 +856,24 @@ abstract class NodeLocator
 		}
 		return $nodes;
 	}
-	protected static function getNodesByRegexp(DOMDocument $dom, $regexp, $type, $prefix)
+	protected static function getNodes(DOMDocument $dom, $type)
 	{
-		$candidates = [];
-		$xpath      = new DOMXPath($dom);
+		$nodes  = [];
+		$prefix = ($type === 'attribute') ? '@' : '';
+		$xpath  = new DOMXPath($dom);
 		foreach ($xpath->query('//' . $prefix . '*') as $node)
-			$candidates[] = [$node, $node->nodeName];
+			$nodes[] = [$node, $node->nodeName];
 		foreach ($xpath->query('//xsl:' . $type) as $node)
-			$candidates[] = [$node, $node->getAttribute('name')];
+			$nodes[] = [$node, $node->getAttribute('name')];
 		foreach ($xpath->query('//xsl:copy-of') as $node)
 			if (\preg_match('/^' . $prefix . '(\\w+)$/', $node->getAttribute('select'), $m))
-				$candidates[] = [$node, $m[1]];
+				$nodes[] = [$node, $m[1]];
+		return $nodes;
+	}
+	protected static function getNodesByRegexp(DOMDocument $dom, $regexp, $type)
+	{
 		$nodes = [];
-		foreach ($candidates as $_13697a20)
+		foreach (self::getNodes($dom, $type) as $_13697a20)
 		{
 			list($node, $name) = $_13697a20;
 			if (\preg_match($regexp, $name))
@@ -918,7 +885,7 @@ abstract class NodeLocator
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Helpers;
@@ -1434,7 +1401,7 @@ abstract class RegexpBuilder
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Helpers;
@@ -1579,7 +1546,7 @@ abstract class RulesHelper
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Helpers;
@@ -1713,7 +1680,7 @@ abstract class TemplateHelper
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Helpers;
@@ -1992,7 +1959,7 @@ class TemplateInspector
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Helpers;
@@ -2024,7 +1991,10 @@ abstract class TemplateLoader
 	}
 	public static function save(DOMDocument $dom)
 	{
-		return self::innerXML($dom->documentElement);
+		$xml = self::innerXML($dom->documentElement);
+		if (\strpos($xml, 'xmlns:xsl') !== \false)
+			$xml = \preg_replace('((<[^>]+?) xmlns:xsl="' . self::XMLNS_XSL . '")', '$1', $xml);
+		return $xml;
 	}
 	protected static function fixEntities($template)
 	{
@@ -2042,12 +2012,12 @@ abstract class TemplateLoader
 		$dom  = new DOMDocument;
 		$html = '<?xml version="1.0" encoding="utf-8" ?><html><body><div>' . $template . '</div></body></html>';
 		$useErrors = \libxml_use_internal_errors(\true);
-		$dom->loadHTML($html);
+		$dom->loadHTML($html, \LIBXML_NSCLEAN);
 		self::removeInvalidAttributes($dom);
 		\libxml_use_internal_errors($useErrors);
 		$xml = '<?xml version="1.0" encoding="utf-8" ?><xsl:template xmlns:xsl="' . self::XMLNS_XSL . '">' . self::innerXML($dom->documentElement->firstChild->firstChild) . '</xsl:template>';
 		$useErrors = \libxml_use_internal_errors(\true);
-		$dom->loadXML($xml);
+		$dom->loadXML($xml, \LIBXML_NSCLEAN);
 		\libxml_use_internal_errors($useErrors);
 		return $dom;
 	}
@@ -2056,7 +2026,7 @@ abstract class TemplateLoader
 		$xml = '<?xml version="1.0" encoding="utf-8" ?><xsl:template xmlns:xsl="' . self::XMLNS_XSL . '">' . $template . '</xsl:template>';
 		$useErrors = \libxml_use_internal_errors(\true);
 		$dom       = new DOMDocument;
-		$success   = $dom->loadXML($xml);
+		$success   = $dom->loadXML($xml, \LIBXML_NSCLEAN);
 		self::removeInvalidAttributes($dom);
 		\libxml_use_internal_errors($useErrors);
 		return ($success) ? $dom : \false;
@@ -2072,7 +2042,7 @@ abstract class TemplateLoader
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Helpers;
@@ -2096,7 +2066,7 @@ class TemplateParser
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Helpers\TemplateParser;
@@ -2128,7 +2098,7 @@ abstract class IRProcessor
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Helpers;
@@ -2188,29 +2158,33 @@ abstract class XPathHelper
 		$map = [];
 		foreach ($matches as $m)
 		{
-			$key = $m['key'];
-			if (!empty($m['concat']))
-			{
-				\preg_match_all('(\'[^\']*\'|"[^"]*")', $m['concat'], $strings);
-				$value = '';
-				foreach ($strings[0] as $string)
-					$value .= \substr($string, 1, -1);
-			}
-			else
-			{
-				$value = $m['literal'];
-				if ($value[0] === "'" || $value[0] === '"')
-					$value = \substr($value, 1, -1);
-			}
+			$key   = $m['key'];
+			$value = (!empty($m['concat']))
+			       ? self::evaluateConcat($m['concat'])
+			       : self::evaluateLiteral($m['literal']);
 			$map[$key][] = $value;
 		}
 		return $map;
+	}
+	protected static function evaluateConcat($expr)
+	{
+		\preg_match_all('(\'[^\']*\'|"[^"]*")', $expr, $strings);
+		$value = '';
+		foreach ($strings[0] as $string)
+			$value .= \substr($string, 1, -1);
+		return $value;
+	}
+	protected static function evaluateLiteral($expr)
+	{
+		if ($expr[0] === '"' || $expr[0] === "'")
+			$expr = \substr($expr, 1, -1);
+		return $expr;
 	}
 }
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Items;
@@ -2294,7 +2268,7 @@ class Template
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\JavaScript;
@@ -2422,7 +2396,7 @@ class FunctionProvider
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator;
@@ -2433,7 +2407,7 @@ interface RendererGenerator
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP;
@@ -2490,7 +2464,7 @@ abstract class AbstractOptimizer
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP;
@@ -2717,7 +2691,7 @@ class BranchOutputOptimizer
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP;
@@ -2920,7 +2894,7 @@ class Optimizer
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP;
@@ -3145,6 +3119,7 @@ class Quick
 	protected static function replacePHP(&$php)
 	{
 		$getAttribute = "\\\$node->getAttribute\\(('[^']+')\\)";
+		$string       = "'(?:[^\\\\']|\\\\.)*+'";
 		$replacements = [
 			'$this->out' => '$html',
 			'(htmlspecialchars\\(' . $getAttribute . ',' . \ENT_NOQUOTES . '\\))'
@@ -3158,32 +3133,32 @@ class Quick
 				=> 'strtr($attributes[$1],$2,$3)',
 			'(' . $getAttribute . '(!?=+)' . $getAttribute . ')'
 				=> '$attributes[$1]$2$attributes[$3]',
-			'(' . $getAttribute . "===('.*?(?<!\\\\)(?:\\\\\\\\)*'))s"
+			'(' . $getAttribute . '===(' . $string . '))s'
 				=> function ($m)
 				{
 					return '$attributes[' . $m[1] . ']===' . \htmlspecialchars($m[2], \ENT_COMPAT);
 				},
-			"(('.*?(?<!\\\\)(?:\\\\\\\\)*')===" . $getAttribute . ')s'
+			'((' . $string . ')===' . $getAttribute . ')s'
 				=> function ($m)
 				{
 					return \htmlspecialchars($m[1], \ENT_COMPAT) . '===$attributes[' . $m[2] . ']';
 				},
-			'(strpos\\(' . $getAttribute . ",('.*?(?<!\\\\)(?:\\\\\\\\)*')\\)([!=]==(?:0|false)))s"
+			'(strpos\\(' . $getAttribute . ',(' . $string . ')\\)([!=]==(?:0|false)))s'
 				=> function ($m)
 				{
 					return 'strpos($attributes[' . $m[1] . "]," . \htmlspecialchars($m[2], \ENT_COMPAT) . ')' . $m[3];
 				},
-			"(strpos\\(('.*?(?<!\\\\)(?:\\\\\\\\)*')," . $getAttribute . '\\)([!=]==(?:0|false)))s'
+			'(strpos\\((' . $string . '),' . $getAttribute . '\\)([!=]==(?:0|false)))s'
 				=> function ($m)
 				{
 					return 'strpos(' . \htmlspecialchars($m[1], \ENT_COMPAT) . ',$attributes[' . $m[2] . '])' . $m[3];
 				},
-			'(' . $getAttribute . '(?=(?:==|[-+*])\\d+))'        => '$attributes[$1]',
-			'((?<!\\w)(\\d+(?:==|[-+*]))' . $getAttribute . ')'  => '$1$attributes[$2]',
-			"(empty\\(\\\$node->getAttribute\\(('[^']+')\\)\\))" => 'empty($attributes[$1])',
-			"(\\\$node->hasAttribute\\(('[^']+')\\))"            => 'isset($attributes[$1])',
-			'if($node->attributes->length)' => 'if($this->hasNonNullValues($attributes))',
-			"(\\\$node->getAttribute\\(('[^']+')\\))" => 'htmlspecialchars_decode($attributes[$1])'
+			'(' . $getAttribute . '(?=(?:==|[-+*])\\d+))'  => '$attributes[$1]',
+			'(\\b(\\d+(?:==|[-+*]))' . $getAttribute . ')' => '$1$attributes[$2]',
+			'(empty\\(' . $getAttribute . '\\))'           => 'empty($attributes[$1])',
+			"(\\\$node->hasAttribute\\(('[^']+')\\))"      => 'isset($attributes[$1])',
+			'if($node->attributes->length)'                => 'if($this->hasNonNullValues($attributes))',
+			'(' . $getAttribute . ')' => 'htmlspecialchars_decode($attributes[$1])'
 		];
 		foreach ($replacements as $match => $replace)
 			if ($replace instanceof Closure)
@@ -3339,7 +3314,7 @@ class Quick
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP;
@@ -3351,6 +3326,7 @@ use s9e\TextFormatter\Configurator\Helpers\TemplateParser;
 class Serializer
 {
 	public $convertor;
+	protected $isVoid;
 	public $useMultibyteStringFunctions = \false;
 	protected $xpath;
 	public function __construct()
@@ -3369,7 +3345,10 @@ class Serializer
 	}
 	public function serialize(DOMElement $ir)
 	{
-		$this->xpath = new DOMXPath($ir->ownerDocument);
+		$this->xpath  = new DOMXPath($ir->ownerDocument);
+		$this->isVoid = [];
+		foreach ($this->xpath->query('//element') as $element)
+			$this->isVoid[$element->getAttribute('id')] = $element->getAttribute('void');
 		return $this->serializeChildren($ir);
 	}
 	protected function convertAttributeValueTemplate($attrValue)
@@ -3436,7 +3415,7 @@ class Serializer
 			$php .= '$t' . $id . '=1;';
 		if ($closeTag->hasAttribute('check'))
 			$php = 'if(!isset($t' . $id . ')){' . $php . '}';
-		if ($this->xpath->evaluate('count(//element[@id="' . $id . '"][@void = "maybe"])'))
+		if ($this->isVoid[$id] === 'maybe')
 			$php .= 'if(!$v' . $id . '){';
 		return $php;
 	}
@@ -3522,7 +3501,7 @@ class Serializer
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP;
@@ -3566,7 +3545,7 @@ class SwitchStatement
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP;
@@ -3951,7 +3930,7 @@ class XPathConvertor
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RulesGenerators\Interfaces;
@@ -3963,7 +3942,7 @@ interface BooleanRulesGenerator
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RulesGenerators\Interfaces;
@@ -3975,7 +3954,7 @@ interface TargetedRulesGenerator
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator;
@@ -3989,7 +3968,7 @@ abstract class TemplateCheck
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -4022,10 +4001,16 @@ abstract class AbstractNormalization
 		$prefix = \strstr($nodeName, ':', \true);
 		if ($prefix > '')
 		{
-			$methodName  .= 'NS';
+			$methodName .= 'NS';
 			\array_unshift($args, $this->ownerDocument->lookupNamespaceURI($prefix));
 		}
 		return \call_user_func_array([$this->ownerDocument, $methodName], $args);
+	}
+	protected function createText($content)
+	{
+		return (\trim($content) === '')
+		     ? $this->createElement('xsl:text', $content)
+		     : $this->ownerDocument->createTextNode($content);
 	}
 	protected function createTextNode($content)
 	{
@@ -4073,7 +4058,7 @@ abstract class AbstractNormalization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Traits;
@@ -4127,7 +4112,7 @@ trait CollectionProxy
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Traits;
@@ -4230,7 +4215,7 @@ trait Configurable
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Traits;
@@ -4277,7 +4262,7 @@ trait TemplateSafeness
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Validators;
@@ -4298,7 +4283,7 @@ abstract class AttributeName
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Validators;
@@ -4321,7 +4306,7 @@ abstract class TagName
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Collections;
@@ -4368,7 +4353,7 @@ class Collection implements ConfigProvider, Countable, Iterator
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Helpers\TemplateParser;
@@ -4426,7 +4411,7 @@ class Normalizer extends IRProcessor
 	protected function addElementIds(DOMDocument $ir)
 	{
 		$id = 0;
-		foreach ($ir->getElementsByTagName('element') as $element)
+		foreach ($this->query('//element') as $element)
 			$element->setAttribute('id', ++$id);
 	}
 	protected function getOutputContext(DOMNode $output)
@@ -4480,7 +4465,7 @@ class Normalizer extends IRProcessor
 	}
 	protected function markConditionalCloseTagElements(DOMDocument $ir)
 	{
-		foreach ($ir->getElementsByTagName('closeTag') as $closeTag)
+		foreach ($this->query('//closeTag') as $closeTag)
 		{
 			$id = $closeTag->getAttribute('id');
 			$query = 'ancestor::switch/following-sibling::*/descendant-or-self::closeTag[@id = "' . $id . '"]';
@@ -4493,7 +4478,7 @@ class Normalizer extends IRProcessor
 	}
 	protected function markVoidElements(DOMDocument $ir)
 	{
-		foreach ($ir->getElementsByTagName('element') as $element)
+		foreach ($this->query('//element') as $element)
 		{
 			$elName = $element->getAttribute('name');
 			if (\strpos($elName, '{') !== \false)
@@ -4504,14 +4489,14 @@ class Normalizer extends IRProcessor
 	}
 	protected function setOutputContext(DOMDocument $ir)
 	{
-		foreach ($ir->getElementsByTagName('output') as $output)
+		foreach ($this->query('//output') as $output)
 			$output->setAttribute('escape', $this->getOutputContext($output));
 	}
 }
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Helpers\TemplateParser;
@@ -4626,7 +4611,7 @@ class Optimizer extends IRProcessor
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Helpers\TemplateParser;
@@ -4805,7 +4790,7 @@ class Parser extends IRProcessor
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Items;
@@ -4847,7 +4832,7 @@ class Attribute implements ConfigProvider
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Items;
@@ -4952,7 +4937,7 @@ class ProgrammableCallback implements ConfigProvider
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Items;
@@ -5030,7 +5015,7 @@ class Regexp implements ConfigProvider, FilterableConfigValue
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Items;
@@ -5136,7 +5121,7 @@ class Tag implements ConfigProvider
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\JavaScript;
@@ -5160,7 +5145,7 @@ class Code implements FilterableConfigValue
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RendererGenerators;
@@ -5239,7 +5224,7 @@ class PHP implements RendererGenerator
 		           ? $this->className
 		           : $this->defaultClassPrefix . \sha1($php);
 		$this->lastClassName = $className;
-		$header = "\n/**\n* @package   s9e\TextFormatter\n* @copyright Copyright (c) 2010-2018 The s9e Authors\n* @license   http://www.opensource.org/licenses/mit-license.php The MIT License\n*/\n";
+		$header = "\n/**\n* @package   s9e\TextFormatter\n* @copyright Copyright (c) 2010-2019 The s9e Authors\n* @license   http://www.opensource.org/licenses/mit-license.php The MIT License\n*/\n";
 		$pos = \strrpos($className, '\\');
 		if ($pos !== \false)
 		{
@@ -5269,7 +5254,7 @@ class PHP implements RendererGenerator
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP;
@@ -5412,7 +5397,7 @@ class ControlStructuresOptimizer extends AbstractOptimizer
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator;
@@ -5484,7 +5469,7 @@ class Rendering
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator;
@@ -5579,7 +5564,7 @@ class RulesGenerator implements ArrayAccess, Iterator
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RulesGenerators;
@@ -5595,7 +5580,7 @@ class AutoCloseIfVoid implements BooleanRulesGenerator
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RulesGenerators;
@@ -5611,7 +5596,7 @@ class AutoReopenFormattingElements implements BooleanRulesGenerator
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RulesGenerators;
@@ -5627,7 +5612,7 @@ class BlockElementsCloseFormattingElements implements TargetedRulesGenerator
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RulesGenerators;
@@ -5643,7 +5628,7 @@ class BlockElementsFosterFormattingElements implements TargetedRulesGenerator
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RulesGenerators;
@@ -5659,7 +5644,7 @@ class DisableAutoLineBreaksIfNewLinesArePreserved implements BooleanRulesGenerat
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RulesGenerators;
@@ -5705,7 +5690,7 @@ class EnforceContentModels implements BooleanRulesGenerator, TargetedRulesGenera
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RulesGenerators;
@@ -5721,7 +5706,7 @@ class EnforceOptionalEndTags implements TargetedRulesGenerator
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RulesGenerators;
@@ -5737,7 +5722,7 @@ class IgnoreTagsInCode implements BooleanRulesGenerator
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RulesGenerators;
@@ -5753,7 +5738,7 @@ class IgnoreTextIfDisallowed implements BooleanRulesGenerator
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RulesGenerators;
@@ -5769,7 +5754,7 @@ class IgnoreWhitespaceAroundBlockElements implements BooleanRulesGenerator
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\RulesGenerators;
@@ -5785,7 +5770,7 @@ class TrimFirstLineInCodeBlocks implements BooleanRulesGenerator
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator;
@@ -5852,7 +5837,7 @@ class TemplateChecker implements ArrayAccess, Iterator
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateChecks;
@@ -5986,7 +5971,7 @@ abstract class AbstractDynamicContentCheck extends TemplateCheck
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateChecks;
@@ -6116,7 +6101,7 @@ abstract class AbstractFlashRestriction extends TemplateCheck
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateChecks;
@@ -6138,7 +6123,7 @@ class DisallowAttributeSets extends TemplateCheck
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateChecks;
@@ -6159,7 +6144,7 @@ class DisallowCopy extends TemplateCheck
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateChecks;
@@ -6181,7 +6166,7 @@ class DisallowDisableOutputEscaping extends TemplateCheck
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateChecks;
@@ -6202,7 +6187,7 @@ class DisallowDynamicAttributeNames extends TemplateCheck
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateChecks;
@@ -6223,7 +6208,7 @@ class DisallowDynamicElementNames extends TemplateCheck
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateChecks;
@@ -6250,7 +6235,7 @@ class DisallowElementNS extends TemplateCheck
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateChecks;
@@ -6273,7 +6258,7 @@ class DisallowObjectParamsWithGeneratedName extends TemplateCheck
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateChecks;
@@ -6308,7 +6293,7 @@ class DisallowPHPTags extends TemplateCheck
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateChecks;
@@ -6332,7 +6317,7 @@ class DisallowUnsafeCopyOf extends TemplateCheck
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateChecks;
@@ -6380,7 +6365,7 @@ class DisallowXPathFunction extends TemplateCheck
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -6437,7 +6422,7 @@ abstract class AbstractChooseOptimization extends AbstractNormalization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -6481,7 +6466,7 @@ abstract class AbstractConstantFolding extends AbstractNormalization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -6510,7 +6495,7 @@ class EnforceHTMLOmittedEndTags extends AbstractNormalization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -6539,7 +6524,7 @@ class FixUnescapedCurlyBracesInHtmlAttributes extends AbstractNormalization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -6565,7 +6550,7 @@ class InlineAttributes extends AbstractNormalization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -6576,13 +6561,13 @@ class InlineCDATA extends AbstractNormalization
 	protected function normalizeNode(DOMNode $node)
 	{
 		if ($node->nodeType === \XML_CDATA_SECTION_NODE)
-			$node->parentNode->replaceChild($this->createTextNode($node->textContent), $node);
+			$node->parentNode->replaceChild($this->createText($node->textContent), $node);
 	}
 }
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -6613,7 +6598,7 @@ class InlineElements extends AbstractNormalization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -6657,16 +6642,13 @@ class InlineInferredValues extends AbstractNormalization
 	}
 	protected function replaceValueOf(DOMElement $valueOf, $value)
 	{
-		$valueOf->parentNode->replaceChild(
-			$valueOf->ownerDocument->createTextNode($value),
-			$valueOf
-		);
+		$valueOf->parentNode->replaceChild($this->createText($value), $valueOf);
 	}
 }
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -6693,7 +6675,7 @@ class InlineTextElements extends AbstractNormalization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -6735,13 +6717,13 @@ class InlineXPathLiterals extends AbstractNormalization
 	{
 		$textContent = $this->getTextContent($element->getAttribute('select'));
 		if ($textContent !== \false)
-			$element->parentNode->replaceChild($this->createTextNode($textContent), $element);
+			$element->parentNode->replaceChild($this->createText($textContent), $element);
 	}
 }
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -6777,7 +6759,7 @@ class MinifyInlineCSS extends AbstractNormalization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -6814,7 +6796,7 @@ class MinifyXPathExpressions extends AbstractNormalization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -6822,15 +6804,14 @@ use DOMAttr;
 use DOMElement;
 class NormalizeAttributeNames extends AbstractNormalization
 {
-	protected $queries = ['//@*', '//xsl:attribute[not(contains(@name, "{"))]'];
+	protected $queries = [
+		'//@*[name() != translate(name(), "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz")]',
+		'//xsl:attribute[not(contains(@name, "{"))][@name != translate(@name, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz")]'
+	];
 	protected function normalizeAttribute(DOMAttr $attribute)
 	{
-		$attrName = $this->lowercase($attribute->localName);
-		if ($attrName !== $attribute->localName)
-		{
-			$attribute->parentNode->setAttribute($attrName, $attribute->value);
-			$attribute->parentNode->removeAttributeNode($attribute);
-		}
+		$attribute->parentNode->setAttribute($this->lowercase($attribute->localName), $attribute->value);
+		$attribute->parentNode->removeAttributeNode($attribute);
 	}
 	protected function normalizeElement(DOMElement $element)
 	{
@@ -6840,7 +6821,7 @@ class NormalizeAttributeNames extends AbstractNormalization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -6885,7 +6866,7 @@ class NormalizeElementNames extends AbstractNormalization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -6936,7 +6917,7 @@ class NormalizeUrls extends AbstractNormalization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -6954,7 +6935,7 @@ class OptimizeConditionalAttributes extends AbstractNormalization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -6975,7 +6956,7 @@ class OptimizeConditionalValueOf extends AbstractNormalization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -6991,7 +6972,7 @@ class PreserveSingleSpaces extends AbstractNormalization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -7007,7 +6988,7 @@ class RemoveComments extends AbstractNormalization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -7023,7 +7004,7 @@ class RemoveInterElementWhitespace extends AbstractNormalization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -7047,7 +7028,7 @@ class RemoveLivePreviewAttributes extends AbstractNormalization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -7080,7 +7061,7 @@ class SetRelNoreferrerOnTargetedLinks extends AbstractNormalization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -7089,20 +7070,29 @@ use DOMElement;
 use s9e\TextFormatter\Configurator\Helpers\AVTHelper;
 class UninlineAttributes extends AbstractNormalization
 {
-	protected $queries = ['//*[namespace-uri() != $XSL]'];
+	protected $queries = ['//*[namespace-uri() != $XSL][@*]'];
 	protected function normalizeElement(DOMElement $element)
 	{
-		$firstChild = $element->firstChild;
+		$fragment = $element->ownerDocument->createDocumentFragment();
 		while ($element->attributes->length > 0)
 		{
 			$attribute = $element->attributes->item(0);
-			$element->insertBefore($this->uninlineAttribute($attribute), $firstChild);
+			$fragment->appendChild($this->uninlineAttribute($attribute));
 		}
+		$element->insertBefore($fragment, $element->firstChild);
 	}
 	protected function uninlineAttribute(DOMAttr $attribute)
 	{
-		$xslAttribute  = $this->createElement('xsl:attribute');
+		$xslAttribute = (\strpos($attribute->value, '{') === \false)
+		              ? $this->uninlineStaticAttribute($attribute)
+		              : $this->uninlineDynamicAttribute($attribute);
 		$xslAttribute->setAttribute('name', $attribute->nodeName);
+		$attribute->parentNode->removeAttributeNode($attribute);
+		return $xslAttribute;
+	}
+	protected function uninlineDynamicAttribute(DOMAttr $attribute)
+	{
+		$xslAttribute = $this->createElement('xsl:attribute');
 		foreach (AVTHelper::parse($attribute->value) as $_f6b3b659)
 		{
 			list($type, $content) = $_f6b3b659;
@@ -7112,20 +7102,20 @@ class UninlineAttributes extends AbstractNormalization
 				$childNode->setAttribute('select', $content);
 			}
 			else
-			{
-				$childNode = $this->createElement('xsl:text');
-				$childNode->appendChild($this->createTextNode($content));
-			}
+				$childNode = $this->createText($content);
 			$xslAttribute->appendChild($childNode);
 		}
-		$attribute->parentNode->removeAttributeNode($attribute);
 		return $xslAttribute;
+	}
+	protected function uninlineStaticAttribute(DOMAttr $attribute)
+	{
+		return $this->createElement('xsl:attribute', \str_replace('}}', '}', $attribute->value));
 	}
 }
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license'); The MIT License
 */
 namespace s9e\TextFormatter\Configurator;
@@ -7146,24 +7136,24 @@ class TemplateNormalizer implements ArrayAccess, Iterator
 		$this->collection->append('PreserveSingleSpaces');
 		$this->collection->append('RemoveComments');
 		$this->collection->append('RemoveInterElementWhitespace');
+		$this->collection->append('NormalizeElementNames');
 		$this->collection->append('FixUnescapedCurlyBracesInHtmlAttributes');
-		$this->collection->append('UninlineAttributes');
 		$this->collection->append('EnforceHTMLOmittedEndTags');
-		$this->collection->append('FoldArithmeticConstants');
-		$this->collection->append('FoldConstantXPathExpressions');
 		$this->collection->append('InlineCDATA');
 		$this->collection->append('InlineElements');
 		$this->collection->append('InlineTextElements');
-		$this->collection->append('InlineXPathLiterals');
+		$this->collection->append('UninlineAttributes');
 		$this->collection->append('MinifyXPathExpressions');
 		$this->collection->append('NormalizeAttributeNames');
-		$this->collection->append('NormalizeElementNames');
-		$this->collection->append('NormalizeUrls');
 		$this->collection->append('OptimizeConditionalAttributes');
+		$this->collection->append('FoldArithmeticConstants');
+		$this->collection->append('FoldConstantXPathExpressions');
+		$this->collection->append('InlineXPathLiterals');
+		$this->collection->append('OptimizeChooseText');
 		$this->collection->append('OptimizeConditionalValueOf');
 		$this->collection->append('OptimizeChoose');
-		$this->collection->append('OptimizeChooseText');
 		$this->collection->append('InlineAttributes');
+		$this->collection->append('NormalizeUrls');
 		$this->collection->append('InlineInferredValues');
 		$this->collection->append('SetRelNoreferrerOnTargetedLinks');
 		$this->collection->append('MinifyInlineCSS');
@@ -7195,7 +7185,7 @@ class TemplateNormalizer implements ArrayAccess, Iterator
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator;
@@ -7250,7 +7240,7 @@ class UrlConfig implements ConfigProvider
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Collections;
@@ -7314,7 +7304,7 @@ class AttributePreprocessorCollection extends Collection
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Collections;
@@ -7414,7 +7404,7 @@ class NormalizedCollection extends Collection implements ArrayAccess
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Collections;
@@ -7568,7 +7558,7 @@ class Ruleset extends Collection implements ArrayAccess, ConfigProvider
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Items;
@@ -7578,7 +7568,7 @@ abstract class Filter extends ProgrammableCallback
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateChecks;
@@ -7604,7 +7594,7 @@ class DisallowUnsafeDynamicCSS extends AbstractDynamicContentCheck
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateChecks;
@@ -7630,7 +7620,7 @@ class DisallowUnsafeDynamicJS extends AbstractDynamicContentCheck
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateChecks;
@@ -7669,7 +7659,7 @@ class DisallowUnsafeDynamicURL extends AbstractDynamicContentCheck
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateChecks;
@@ -7686,7 +7676,7 @@ class RestrictFlashScriptAccess extends AbstractFlashRestriction
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -7695,9 +7685,9 @@ class FoldArithmeticConstants extends AbstractConstantFolding
 {
 	protected function getOptimizationPasses()
 	{
-		$n = '-?\\.\\d++|-?\\d++(?:\\.\\d++)?';
+		$n = '-?\\.[0-9]++|-?[0-9]++(?:\\.[0-9]++)?';
 		return [
-			'(^[-+0-9\\s]+$)'                                            => 'foldOperation',
+			'(^[0-9\\s]*[-+][-+0-9\\s]+$)'                               => 'foldOperation',
 			'( \\+ 0(?! [^+\\)])|(?<![-\\w])0 \\+ )'                     => 'foldAdditiveIdentity',
 			'(^((?>' . $n . ' [-+] )*)(' . $n . ') div (' . $n . '))'    => 'foldDivision',
 			'(^((?>' . $n . ' [-+] )*)(' . $n . ') \\* (' . $n . '))'    => 'foldMultiplication',
@@ -7754,7 +7744,7 @@ class FoldArithmeticConstants extends AbstractConstantFolding
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -7822,7 +7812,7 @@ class FoldConstantXPathExpressions extends AbstractConstantFolding
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -7940,7 +7930,7 @@ class OptimizeChoose extends AbstractChooseOptimization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
@@ -7999,7 +7989,7 @@ class OptimizeChooseText extends AbstractChooseOptimization
 		{
 			$this->adjustTextNodes('firstChild', $len);
 			$this->choose->parentNode->insertBefore(
-				$this->createTextNode(\substr($strings[0], 0, $len)),
+				$this->createText(\substr($strings[0], 0, $len)),
 				$this->choose
 			);
 		}
@@ -8014,7 +8004,7 @@ class OptimizeChooseText extends AbstractChooseOptimization
 		{
 			$this->adjustTextNodes('lastChild', 0, -$len);
 			$this->choose->parentNode->insertBefore(
-				$this->createTextNode(\substr($strings[0], -$len)),
+				$this->createText(\substr($strings[0], -$len)),
 				$this->choose->nextSibling
 			);
 		}
@@ -8023,7 +8013,7 @@ class OptimizeChooseText extends AbstractChooseOptimization
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Collections;
@@ -8055,7 +8045,7 @@ class AttributeCollection extends NormalizedCollection
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Collections;
@@ -8103,7 +8093,7 @@ class AttributeFilterCollection extends NormalizedCollection
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Collections;
@@ -8173,7 +8163,7 @@ class NormalizedList extends NormalizedCollection
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Collections;
@@ -8239,7 +8229,7 @@ class PluginCollection extends NormalizedCollection
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Collections;
@@ -8271,7 +8261,7 @@ class TagCollection extends NormalizedCollection
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Collections;
@@ -8290,7 +8280,7 @@ class TemplateParameterCollection extends NormalizedCollection
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Items;
@@ -8319,7 +8309,7 @@ class AttributeFilter extends Filter
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Items;
@@ -8335,7 +8325,7 @@ class TagFilter extends Filter
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Collections;
@@ -8366,7 +8356,7 @@ abstract class FilterChain extends NormalizedList
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Collections;
@@ -8418,7 +8408,7 @@ class HostnameList extends NormalizedList
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Collections;
@@ -8444,7 +8434,7 @@ class RulesGeneratorList extends NormalizedList
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Collections;
@@ -8467,7 +8457,7 @@ class SchemeList extends NormalizedList
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Collections;
@@ -8487,7 +8477,7 @@ class TemplateCheckList extends NormalizedList
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Collections;
@@ -8508,7 +8498,7 @@ class TemplateNormalizationList extends NormalizedList
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Items\AttributeFilters;
@@ -8540,7 +8530,7 @@ class UrlFilter extends AttributeFilter
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Collections;
@@ -8560,7 +8550,7 @@ class AttributeFilterChain extends FilterChain
 
 /*
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2018 The s9e Authors
+* @copyright Copyright (c) 2010-2019 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\Collections;
