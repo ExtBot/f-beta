@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "axy/backtrace",
-            "version": "1.0.5",
+            "version": "1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/axypro/backtrace.git",
-                "reference": "2ab4b9bd49b1174fc9e767a53caf783da07c6bec"
+                "reference": "c6c7d0f3497a07ae934f9e8511cbc2286db311c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/axypro/backtrace/zipball/2ab4b9bd49b1174fc9e767a53caf783da07c6bec",
-                "reference": "2ab4b9bd49b1174fc9e767a53caf783da07c6bec",
+                "url": "https://api.github.com/repos/axypro/backtrace/zipball/c6c7d0f3497a07ae934f9e8511cbc2286db311c5",
+                "reference": "c6c7d0f3497a07ae934f9e8511cbc2286db311c5",
                 "shasum": ""
             },
             "require": {
@@ -47,7 +47,7 @@
                 "exception",
                 "trace"
             ],
-            "time": "2015-12-05T12:44:09+00:00"
+            "time": "2019-02-02T15:52:44+00:00"
         },
         {
             "name": "axy/codecs-base64vlq",
@@ -96,16 +96,16 @@
         },
         {
             "name": "axy/errors",
-            "version": "1.0.4",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/axypro/errors.git",
-                "reference": "4edb49d1a8791f09a6f603cfdf8449fa0edfe206"
+                "reference": "2c64374ae2b9ca51304c09b6b6acc275557fc34f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/axypro/errors/zipball/4edb49d1a8791f09a6f603cfdf8449fa0edfe206",
-                "reference": "4edb49d1a8791f09a6f603cfdf8449fa0edfe206",
+                "url": "https://api.github.com/repos/axypro/errors/zipball/2c64374ae2b9ca51304c09b6b6acc275557fc34f",
+                "reference": "2c64374ae2b9ca51304c09b6b6acc275557fc34f",
                 "shasum": ""
             },
             "require": {
@@ -134,7 +134,7 @@
                 "error",
                 "exception"
             ],
-            "time": "2015-11-13T13:56:59+00:00"
+            "time": "2019-02-02T18:26:18+00:00"
         },
         {
             "name": "axy/sourcemap",
