@@ -25,9 +25,9 @@
         "psr/http-server-handler": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.3",
+        "phpunit/phpunit": "^7.0.2",
         "zendframework/zend-coding-standard": "~1.0.0",
-        "zendframework/zend-diactoros": "^1.7"
+        "zendframework/zend-diactoros": "^1.7 || ^2.1.1"
     },
     "autoload": {
         "psr-4": {
@@ -39,7 +39,6 @@
             "ZendTest\\HttpHandlerRunner\\": "test/"
         },
         "files": [
-            "test/TestAsset/Functions.php",
             "test/TestAsset/SapiResponse.php"
         ]
     },
@@ -48,7 +47,8 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0-dev"
+            "dev-master": "1.1.x-dev",
+            "dev-develop": "1.2.x-dev"
         },
         "zf": {
             "config-provider": "Zend\\HttpHandlerRunner\\ConfigProvider"
