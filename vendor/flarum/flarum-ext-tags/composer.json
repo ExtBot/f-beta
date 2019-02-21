@@ -1,5 +1,5 @@
 {
-    "name": "flarum/flarum-ext-tags",
+    "name": "flarum/tags",
     "description": "Organize discussions into a hierarchy of tags and categories.",
     "type": "flarum-extension",
     "keywords": ["discussion"],
@@ -12,10 +12,10 @@
     ],
     "support": {
         "issues": "https://github.com/flarum/core/issues",
-        "source": "https://github.com/flarum/flarum-ext-tags"
+        "source": "https://github.com/flarum/tags"
     },
     "require": {
-        "flarum/core": "^0.1.0-beta.7"
+        "flarum/core": "^0.1.0-beta.8"
     },
     "autoload": {
         "psr-4": {
@@ -29,7 +29,7 @@
         "flarum-extension": {
             "title": "Tags",
             "icon": {
-                "name": "tags",
+                "name": "fas fa-tags",
                 "backgroundColor": "#F28326",
                 "color": "#fff"
             }

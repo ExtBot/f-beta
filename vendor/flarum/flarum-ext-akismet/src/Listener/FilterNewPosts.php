@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Flarum.
  *
@@ -11,10 +12,10 @@
 namespace Flarum\Akismet\Listener;
 
 use Flarum\Approval\Event\PostWasApproved;
-use Flarum\Event\PostWasHidden;
-use Flarum\Event\PostWillBeSaved;
 use Flarum\Flags\Flag;
 use Flarum\Foundation\Application;
+use Flarum\Post\Event\Hidden;
+use Flarum\Post\Event\Saving;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 use TijsVerkoyen\Akismet\Akismet;
@@ -46,15 +47,15 @@ class FilterNewPosts
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(PostWillBeSaved::class, [$this, 'validatePost']);
+        $events->listen(Saving::class, [$this, 'validatePost']);
         $events->listen(PostWasApproved::class, [$this, 'submitHam']);
-        $events->listen(PostWasHidden::class, [$this, 'submitSpam']);
+        $events->listen(Hidden::class, [$this, 'submitSpam']);
     }
 
     /**
-     * @param PostWillBeSaved $event
+     * @param Saving $event
      */
-    public function validatePost(PostWillBeSaved $event)
+    public function validatePost(Saving $event)
     {
         $post = $event->post;
 
@@ -84,7 +85,7 @@ class FilterNewPosts
 
                 $flag->post_id = $post->id;
                 $flag->type = 'akismet';
-                $flag->time = time();
+                $flag->created_at = time();
 
                 $flag->save();
             });
@@ -110,9 +111,9 @@ class FilterNewPosts
     }
 
     /**
-     * @param PostWasHidden $event
+     * @param Hidden $event
      */
-    public function submitSpam(PostWasHidden $event)
+    public function submitSpam(Hidden $event)
     {
         $post = $event->post;
 

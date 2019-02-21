@@ -12,8 +12,8 @@
 namespace Flarum\Suspend\Listener;
 
 use Carbon\Carbon;
-use Flarum\Core\Group;
 use Flarum\Event\PrepareUserGroups;
+use Flarum\Group\Group;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class RevokeAccessFromSuspendedUsers
@@ -31,9 +31,9 @@ class RevokeAccessFromSuspendedUsers
      */
     public function prepareUserGroups(PrepareUserGroups $event)
     {
-        $suspendUntil = $event->user->suspend_until;
+        $suspendedUntil = $event->user->suspended_until;
 
-        if ($suspendUntil && $suspendUntil->gt(Carbon::now())) {
+        if ($suspendedUntil && $suspendedUntil->gt(Carbon::now())) {
             $event->groupIds = [Group::GUEST_ID];
         }
     }

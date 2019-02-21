@@ -4385,6 +4385,60 @@
         ]
     },
     {
+        "name": "flarum/flags",
+        "version": "v0.1.0-beta.8.1",
+        "version_normalized": "0.1.0.0-beta8.1",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/flarum/flags.git",
+            "reference": "93c72cc864b6befc641df709ca90f89adae612f6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/flarum/flags/zipball/93c72cc864b6befc641df709ca90f89adae612f6",
+            "reference": "93c72cc864b6befc641df709ca90f89adae612f6",
+            "shasum": ""
+        },
+        "require": {
+            "flarum/core": "^0.1.0-beta.8"
+        },
+        "time": "2018-12-03T23:46:33+00:00",
+        "type": "flarum-extension",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "0.1.x-dev"
+            },
+            "flarum-extension": {
+                "title": "Flags",
+                "icon": {
+                    "name": "fas fa-flag",
+                    "backgroundColor": "#D659B5",
+                    "color": "#fff"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Flarum\\Flags\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Toby Zerner",
+                "email": "toby.zerner@gmail.com"
+            }
+        ],
+        "description": "Allow users to flag posts for moderator review.",
+        "keywords": [
+            "moderation"
+        ]
+    },
+    {
         "name": "guzzlehttp/promises",
         "version": "v1.3.1",
         "version_normalized": "1.3.1.0",
@@ -4505,149 +4559,43 @@
         ]
     },
     {
-        "name": "ircmaxell/security-lib",
-        "version": "v1.1.0",
-        "version_normalized": "1.1.0.0",
+        "name": "flarum/approval",
+        "version": "v0.1.0-beta.8",
+        "version_normalized": "0.1.0.0-beta8",
         "source": {
             "type": "git",
-            "url": "https://github.com/ircmaxell/SecurityLib.git",
-            "reference": "f3db6de12c20c9bcd1aa3db4353a1bbe0e44e1b5"
+            "url": "https://github.com/flarum/approval.git",
+            "reference": "6ed2a7fa68f50dcee6570b90a66ed9af75c95e32"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/ircmaxell/SecurityLib/zipball/f3db6de12c20c9bcd1aa3db4353a1bbe0e44e1b5",
-            "reference": "f3db6de12c20c9bcd1aa3db4353a1bbe0e44e1b5",
+            "url": "https://api.github.com/repos/flarum/approval/zipball/6ed2a7fa68f50dcee6570b90a66ed9af75c95e32",
+            "reference": "6ed2a7fa68f50dcee6570b90a66ed9af75c95e32",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.3.2"
+            "flarum/core": "^0.1.0-beta.8",
+            "flarum/flags": "^0.1.0-beta.6"
         },
-        "require-dev": {
-            "mikey179/vfsstream": "1.1.*"
-        },
-        "time": "2015-03-20T14:31:23+00:00",
-        "type": "library",
+        "time": "2018-11-21T08:27:14+00:00",
+        "type": "flarum-extension",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.0.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "SecurityLib": "lib"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Anthony Ferrara",
-                "email": "ircmaxell@ircmaxell.com",
-                "homepage": "http://blog.ircmaxell.com"
-            }
-        ],
-        "description": "A Base Security Library",
-        "homepage": "https://github.com/ircmaxell/SecurityLib"
-    },
-    {
-        "name": "ircmaxell/random-lib",
-        "version": "v1.2.0",
-        "version_normalized": "1.2.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/ircmaxell/RandomLib.git",
-            "reference": "e9e0204f40e49fa4419946c677eccd3fa25b8cf4"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/ircmaxell/RandomLib/zipball/e9e0204f40e49fa4419946c677eccd3fa25b8cf4",
-            "reference": "e9e0204f40e49fa4419946c677eccd3fa25b8cf4",
-            "shasum": ""
-        },
-        "require": {
-            "ircmaxell/security-lib": "^1.1",
-            "php": ">=5.3.2"
-        },
-        "require-dev": {
-            "friendsofphp/php-cs-fixer": "^1.11",
-            "mikey179/vfsstream": "^1.6",
-            "phpunit/phpunit": "^4.8|^5.0"
-        },
-        "time": "2016-09-07T15:52:06+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.1.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "RandomLib": "lib"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Anthony Ferrara",
-                "email": "ircmaxell@ircmaxell.com",
-                "homepage": "http://blog.ircmaxell.com"
-            }
-        ],
-        "description": "A Library For Generating Secure Random Numbers",
-        "homepage": "https://github.com/ircmaxell/RandomLib",
-        "keywords": [
-            "cryptography",
-            "random",
-            "random-numbers",
-            "random-strings"
-        ]
-    },
-    {
-        "name": "league/oauth2-client",
-        "version": "1.4.2",
-        "version_normalized": "1.4.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/thephpleague/oauth2-client.git",
-            "reference": "01f955b85040b41cf48885b078f7fd39a8be5411"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/thephpleague/oauth2-client/zipball/01f955b85040b41cf48885b078f7fd39a8be5411",
-            "reference": "01f955b85040b41cf48885b078f7fd39a8be5411",
-            "shasum": ""
-        },
-        "require": {
-            "ext-curl": "*",
-            "guzzlehttp/guzzle": "~6.0",
-            "ircmaxell/random-lib": "~1.1",
-            "php": ">=5.5.0"
-        },
-        "require-dev": {
-            "jakub-onderka/php-parallel-lint": "0.8.*",
-            "mockery/mockery": "~0.9",
-            "phpunit/phpunit": "~4.0",
-            "satooshi/php-coveralls": "0.6.*",
-            "squizlabs/php_codesniffer": "~2.0"
-        },
-        "time": "2016-07-28T13:20:43+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.0.x-dev"
+                "dev-master": "0.1.x-dev"
+            },
+            "flarum-extension": {
+                "title": "Approval",
+                "icon": {
+                    "name": "fas fa-check",
+                    "backgroundColor": "#ABDC88",
+                    "color": "#3F8A32"
+                }
             }
         },
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "League\\OAuth2\\Client\\": "src/"
+                "Flarum\\Approval\\": "src/"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -4656,43 +4604,34 @@
         ],
         "authors": [
             {
-                "name": "Alex Bilbie",
-                "email": "hello@alexbilbie.com",
-                "homepage": "http://www.alexbilbie.com",
-                "role": "Developer"
+                "name": "Toby Zerner",
+                "email": "toby.zerner@gmail.com"
             }
         ],
-        "description": "OAuth 2.0 Client Library",
+        "description": "Make discussions and posts require moderator approval.",
         "keywords": [
-            "Authentication",
-            "SSO",
-            "authorization",
-            "identity",
-            "idp",
-            "oauth",
-            "oauth2",
-            "single sign on"
+            "moderation"
         ]
     },
     {
         "name": "flarum/flarum-ext-flags",
-        "version": "v0.1.0-beta.7",
-        "version_normalized": "0.1.0.0-beta7",
+        "version": "v0.1.0-beta.8.1",
+        "version_normalized": "0.1.0.0-beta8.1",
         "source": {
             "type": "git",
-            "url": "https://github.com/flarum/flarum-ext-flags.git",
-            "reference": "8c55eb4e6e737dba47853cc04a5c112d19f7d7d8"
+            "url": "https://github.com/flarum/flags.git",
+            "reference": "93c72cc864b6befc641df709ca90f89adae612f6"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/flarum/flarum-ext-flags/zipball/8c55eb4e6e737dba47853cc04a5c112d19f7d7d8",
-            "reference": "8c55eb4e6e737dba47853cc04a5c112d19f7d7d8",
+            "url": "https://api.github.com/repos/flarum/flags/zipball/93c72cc864b6befc641df709ca90f89adae612f6",
+            "reference": "93c72cc864b6befc641df709ca90f89adae612f6",
             "shasum": ""
         },
         "require": {
-            "flarum/core": "^0.1.0-beta.7"
+            "flarum/core": "^0.1.0-beta.8"
         },
-        "time": "2017-07-22T02:50:24+00:00",
+        "time": "2018-12-03T23:46:33+00:00",
         "type": "flarum-extension",
         "extra": {
             "branch-alias": {
@@ -4701,7 +4640,7 @@
             "flarum-extension": {
                 "title": "Flags",
                 "icon": {
-                    "name": "flag",
+                    "name": "fas fa-flag",
                     "backgroundColor": "#D659B5",
                     "color": "#fff"
                 }
@@ -4730,82 +4669,26 @@
         "abandoned": "flarum/flags"
     },
     {
-        "name": "flarum/flarum-ext-approval",
-        "version": "v0.1.0-beta.7",
-        "version_normalized": "0.1.0.0-beta7",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/flarum/flarum-ext-approval.git",
-            "reference": "0a98a85347cc1fc8c81a7170ac4aa97c90dfc867"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/flarum/flarum-ext-approval/zipball/0a98a85347cc1fc8c81a7170ac4aa97c90dfc867",
-            "reference": "0a98a85347cc1fc8c81a7170ac4aa97c90dfc867",
-            "shasum": ""
-        },
-        "require": {
-            "flarum/core": "^0.1.0-beta.7",
-            "flarum/flarum-ext-flags": "^0.1.0-beta.6"
-        },
-        "time": "2017-07-22T02:52:03+00:00",
-        "type": "flarum-extension",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "0.1.x-dev"
-            },
-            "flarum-extension": {
-                "title": "Approval",
-                "icon": {
-                    "name": "check",
-                    "backgroundColor": "#ABDC88",
-                    "color": "#3F8A32"
-                }
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Flarum\\Approval\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Toby Zerner",
-                "email": "toby.zerner@gmail.com"
-            }
-        ],
-        "description": "Make discussions and posts require moderator approval.",
-        "keywords": [
-            "moderation"
-        ],
-        "abandoned": "flarum/approval"
-    },
-    {
         "name": "flarum/flarum-ext-akismet",
-        "version": "v0.1.0-beta.6",
-        "version_normalized": "0.1.0.0-beta6",
+        "version": "v0.1.0-beta.8",
+        "version_normalized": "0.1.0.0-beta8",
         "source": {
             "type": "git",
-            "url": "https://github.com/flarum/flarum-ext-akismet.git",
-            "reference": "556b0ed5feade265b4ea9684bddbb01917099ee6"
+            "url": "https://github.com/flarum/akismet.git",
+            "reference": "1b2c197952beed6495c43ae5b15492f73fcedf91"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/flarum/flarum-ext-akismet/zipball/556b0ed5feade265b4ea9684bddbb01917099ee6",
-            "reference": "556b0ed5feade265b4ea9684bddbb01917099ee6",
+            "url": "https://api.github.com/repos/flarum/akismet/zipball/1b2c197952beed6495c43ae5b15492f73fcedf91",
+            "reference": "1b2c197952beed6495c43ae5b15492f73fcedf91",
             "shasum": ""
         },
         "require": {
-            "flarum/core": "^0.1.0-beta.6",
-            "flarum/flarum-ext-approval": "^0.1.0-beta.6",
+            "flarum/approval": "^0.1.0-beta.6",
+            "flarum/core": "^0.1.0-beta.8",
             "tijsverkoyen/akismet": "^1.1"
         },
-        "time": "2016-10-19T10:42:05+00:00",
+        "time": "2018-11-21T08:04:20+00:00",
         "type": "flarum-extension",
         "extra": {
             "branch-alias": {
@@ -4844,30 +4727,155 @@
         "abandoned": "flarum/akismet"
     },
     {
-        "name": "league/oauth2-facebook",
-        "version": "1.4.5",
-        "version_normalized": "1.4.5.0",
+        "name": "flarum/flarum-ext-approval",
+        "version": "v0.1.0-beta.8",
+        "version_normalized": "0.1.0.0-beta8",
         "source": {
             "type": "git",
-            "url": "https://github.com/thephpleague/oauth2-facebook.git",
-            "reference": "c68e09f67b1364eefcc7614897100391dac71518"
+            "url": "https://github.com/flarum/approval.git",
+            "reference": "6ed2a7fa68f50dcee6570b90a66ed9af75c95e32"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/thephpleague/oauth2-facebook/zipball/c68e09f67b1364eefcc7614897100391dac71518",
-            "reference": "c68e09f67b1364eefcc7614897100391dac71518",
+            "url": "https://api.github.com/repos/flarum/approval/zipball/6ed2a7fa68f50dcee6570b90a66ed9af75c95e32",
+            "reference": "6ed2a7fa68f50dcee6570b90a66ed9af75c95e32",
             "shasum": ""
         },
         "require": {
-            "league/oauth2-client": "~1.0",
-            "php": ">=5.5.0"
+            "flarum/core": "^0.1.0-beta.8",
+            "flarum/flags": "^0.1.0-beta.6"
+        },
+        "time": "2018-11-21T08:27:14+00:00",
+        "type": "flarum-extension",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "0.1.x-dev"
+            },
+            "flarum-extension": {
+                "title": "Approval",
+                "icon": {
+                    "name": "fas fa-check",
+                    "backgroundColor": "#ABDC88",
+                    "color": "#3F8A32"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Flarum\\Approval\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Toby Zerner",
+                "email": "toby.zerner@gmail.com"
+            }
+        ],
+        "description": "Make discussions and posts require moderator approval.",
+        "keywords": [
+            "moderation"
+        ],
+        "abandoned": "flarum/approval"
+    },
+    {
+        "name": "league/oauth2-client",
+        "version": "2.4.1",
+        "version_normalized": "2.4.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/thephpleague/oauth2-client.git",
+            "reference": "cc114abc622a53af969e8664722e84ca36257530"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/thephpleague/oauth2-client/zipball/cc114abc622a53af969e8664722e84ca36257530",
+            "reference": "cc114abc622a53af969e8664722e84ca36257530",
+            "shasum": ""
+        },
+        "require": {
+            "guzzlehttp/guzzle": "^6.0",
+            "paragonie/random_compat": "^1|^2|^9.99",
+            "php": "^5.6|^7.0"
+        },
+        "require-dev": {
+            "eloquent/liberator": "^2.0",
+            "eloquent/phony-phpunit": "^1.0|^3.0",
+            "jakub-onderka/php-parallel-lint": "^0.9.2",
+            "phpunit/phpunit": "^5.7|^6.0",
+            "squizlabs/php_codesniffer": "^2.3|^3.0"
+        },
+        "time": "2018-11-22T18:33:57+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-2.x": "2.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "League\\OAuth2\\Client\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Alex Bilbie",
+                "email": "hello@alexbilbie.com",
+                "homepage": "http://www.alexbilbie.com",
+                "role": "Developer"
+            },
+            {
+                "name": "Woody Gilk",
+                "homepage": "https://github.com/shadowhand",
+                "role": "Contributor"
+            }
+        ],
+        "description": "OAuth 2.0 Client Library",
+        "keywords": [
+            "Authentication",
+            "SSO",
+            "authorization",
+            "identity",
+            "idp",
+            "oauth",
+            "oauth2",
+            "single sign on"
+        ]
+    },
+    {
+        "name": "league/oauth2-facebook",
+        "version": "2.0.1",
+        "version_normalized": "2.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/thephpleague/oauth2-facebook.git",
+            "reference": "bcbcd540fb66ae16b4f82671c8ae7752b6a89556"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/thephpleague/oauth2-facebook/zipball/bcbcd540fb66ae16b4f82671c8ae7752b6a89556",
+            "reference": "bcbcd540fb66ae16b4f82671c8ae7752b6a89556",
+            "shasum": ""
+        },
+        "require": {
+            "league/oauth2-client": "^2.0",
+            "php": "^5.6 || ^7.0"
         },
         "require-dev": {
             "mockery/mockery": "~0.9",
             "phpunit/phpunit": "~4.0",
             "squizlabs/php_codesniffer": "~2.0"
         },
-        "time": "2017-07-22T01:43:12+00:00",
+        "time": "2017-07-22T01:25:00+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -4898,24 +4906,24 @@
     },
     {
         "name": "flarum/flarum-ext-auth-facebook",
-        "version": "v0.1.0-beta.6",
-        "version_normalized": "0.1.0.0-beta6",
+        "version": "v0.1.0-beta.8",
+        "version_normalized": "0.1.0.0-beta8",
         "source": {
             "type": "git",
-            "url": "https://github.com/flarum/flarum-ext-auth-facebook.git",
-            "reference": "ac3591b7a32b7c6788620e80f48359ffc51d71a2"
+            "url": "https://github.com/flarum/auth-facebook.git",
+            "reference": "f266439277a6b5412d777007894ff0619ef5cc1f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/flarum/flarum-ext-auth-facebook/zipball/ac3591b7a32b7c6788620e80f48359ffc51d71a2",
-            "reference": "ac3591b7a32b7c6788620e80f48359ffc51d71a2",
+            "url": "https://api.github.com/repos/flarum/auth-facebook/zipball/f266439277a6b5412d777007894ff0619ef5cc1f",
+            "reference": "f266439277a6b5412d777007894ff0619ef5cc1f",
             "shasum": ""
         },
         "require": {
-            "flarum/core": "^0.1.0-beta.6",
-            "league/oauth2-facebook": "~1.0"
+            "flarum/core": "^0.1.0-beta.8",
+            "league/oauth2-facebook": "^2.0"
         },
-        "time": "2016-10-19T10:42:20+00:00",
+        "time": "2018-11-21T08:23:48+00:00",
         "type": "flarum-extension",
         "extra": {
             "branch-alias": {
@@ -4924,7 +4932,7 @@
             "flarum-extension": {
                 "title": "Facebook Login",
                 "icon": {
-                    "name": "facebook",
+                    "name": "fab fa-facebook",
                     "backgroundColor": "#3b5998",
                     "color": "#fff"
                 }
@@ -4954,29 +4962,28 @@
     },
     {
         "name": "league/oauth2-github",
-        "version": "0.2.2",
-        "version_normalized": "0.2.2.0",
+        "version": "2.0.0",
+        "version_normalized": "2.0.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/thephpleague/oauth2-github.git",
-            "reference": "3d734abe82839fbffdf60ff1c2d019dc170b0c38"
+            "reference": "e63d64f3ec167c09232d189c6b0c397458a99357"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/thephpleague/oauth2-github/zipball/3d734abe82839fbffdf60ff1c2d019dc170b0c38",
-            "reference": "3d734abe82839fbffdf60ff1c2d019dc170b0c38",
+            "url": "https://api.github.com/repos/thephpleague/oauth2-github/zipball/e63d64f3ec167c09232d189c6b0c397458a99357",
+            "reference": "e63d64f3ec167c09232d189c6b0c397458a99357",
             "shasum": ""
         },
         "require": {
-            "league/oauth2-client": "~1.4",
-            "php": ">=5.5.0"
+            "league/oauth2-client": "^2.0"
         },
         "require-dev": {
             "mockery/mockery": "~0.9",
             "phpunit/phpunit": "~4.0",
             "squizlabs/php_codesniffer": "~2.0"
         },
-        "time": "2016-11-22T05:14:51+00:00",
+        "time": "2017-01-26T01:14:51+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -5012,24 +5019,24 @@
     },
     {
         "name": "flarum/flarum-ext-auth-github",
-        "version": "v0.1.0-beta.6",
-        "version_normalized": "0.1.0.0-beta6",
+        "version": "v0.1.0-beta.8",
+        "version_normalized": "0.1.0.0-beta8",
         "source": {
             "type": "git",
-            "url": "https://github.com/flarum/flarum-ext-auth-github.git",
-            "reference": "14722724e5e0f8de3e5c115f8aa8d39118d05b1f"
+            "url": "https://github.com/flarum/auth-github.git",
+            "reference": "bb749145fad46e85ba4739275b9ae4fa99e0c4e7"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/flarum/flarum-ext-auth-github/zipball/14722724e5e0f8de3e5c115f8aa8d39118d05b1f",
-            "reference": "14722724e5e0f8de3e5c115f8aa8d39118d05b1f",
+            "url": "https://api.github.com/repos/flarum/auth-github/zipball/bb749145fad46e85ba4739275b9ae4fa99e0c4e7",
+            "reference": "bb749145fad46e85ba4739275b9ae4fa99e0c4e7",
             "shasum": ""
         },
         "require": {
-            "flarum/core": "^0.1.0-beta.6",
-            "league/oauth2-github": "^0.2.0"
+            "flarum/core": "^0.1.0-beta.8",
+            "league/oauth2-github": "^2.0"
         },
-        "time": "2016-10-19T10:42:27+00:00",
+        "time": "2018-11-21T08:23:50+00:00",
         "type": "flarum-extension",
         "extra": {
             "branch-alias": {
@@ -5038,7 +5045,7 @@
             "flarum-extension": {
                 "title": "GitHub Login",
                 "icon": {
-                    "name": "github",
+                    "name": "fab fa-github",
                     "backgroundColor": "#eee",
                     "color": "#333"
                 }
@@ -5047,7 +5054,7 @@
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "Flarum\\Auth\\GitHub\\": "src/"
+                "Flarum\\Auth\\Github\\": "src/"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -5133,24 +5140,24 @@
     },
     {
         "name": "flarum/flarum-ext-auth-twitter",
-        "version": "v0.1.0-beta.6",
-        "version_normalized": "0.1.0.0-beta6",
+        "version": "v0.1.0-beta.8",
+        "version_normalized": "0.1.0.0-beta8",
         "source": {
             "type": "git",
-            "url": "https://github.com/flarum/flarum-ext-auth-twitter.git",
-            "reference": "23118d40d3a31d7dbdcf9734d9b8b8dca2358e80"
+            "url": "https://github.com/flarum/auth-twitter.git",
+            "reference": "c928d9b5c75137f9e635e05bdb1db978c57e92dc"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/flarum/flarum-ext-auth-twitter/zipball/23118d40d3a31d7dbdcf9734d9b8b8dca2358e80",
-            "reference": "23118d40d3a31d7dbdcf9734d9b8b8dca2358e80",
+            "url": "https://api.github.com/repos/flarum/auth-twitter/zipball/c928d9b5c75137f9e635e05bdb1db978c57e92dc",
+            "reference": "c928d9b5c75137f9e635e05bdb1db978c57e92dc",
             "shasum": ""
         },
         "require": {
-            "flarum/core": "^0.1.0-beta.6",
+            "flarum/core": "^0.1.0-beta.8",
             "league/oauth1-client": "^1.6"
         },
-        "time": "2016-10-19T10:42:36+00:00",
+        "time": "2018-11-21T08:27:14+00:00",
         "type": "flarum-extension",
         "extra": {
             "branch-alias": {
@@ -5159,7 +5166,7 @@
             "flarum-extension": {
                 "title": "Twitter Login",
                 "icon": {
-                    "name": "twitter",
+                    "name": "fab fa-twitter",
                     "backgroundColor": "#55ADEE",
                     "color": "#fff"
                 }
@@ -5189,23 +5196,23 @@
     },
     {
         "name": "flarum/flarum-ext-bbcode",
-        "version": "v0.1.0-beta.5",
-        "version_normalized": "0.1.0.0-beta5",
+        "version": "v0.1.0-beta.8",
+        "version_normalized": "0.1.0.0-beta8",
         "source": {
             "type": "git",
-            "url": "https://github.com/flarum/flarum-ext-bbcode.git",
-            "reference": "4c238614aac05a3ae40824ac196cf39a4f968981"
+            "url": "https://github.com/flarum/bbcode.git",
+            "reference": "345fb9d4fbc02e41f3ff9b02c79f2a27ff345722"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/flarum/flarum-ext-bbcode/zipball/4c238614aac05a3ae40824ac196cf39a4f968981",
-            "reference": "4c238614aac05a3ae40824ac196cf39a4f968981",
+            "url": "https://api.github.com/repos/flarum/bbcode/zipball/345fb9d4fbc02e41f3ff9b02c79f2a27ff345722",
+            "reference": "345fb9d4fbc02e41f3ff9b02c79f2a27ff345722",
             "shasum": ""
         },
         "require": {
-            "flarum/core": "^0.1.0-beta.5"
+            "flarum/core": "^0.1.0-beta.8"
         },
-        "time": "2016-03-29T08:14:20+00:00",
+        "time": "2018-11-21T08:07:20+00:00",
         "type": "flarum-extension",
         "extra": {
             "branch-alias": {
@@ -5214,18 +5221,13 @@
             "flarum-extension": {
                 "title": "BBCode",
                 "icon": {
-                    "name": "bold",
+                    "name": "fas fa-bold",
                     "backgroundColor": "#238C59",
                     "color": "#fff"
                 }
             }
         },
         "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Flarum\\BBCode\\": "src/"
-            }
-        },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
             "MIT"
@@ -5244,23 +5246,23 @@
     },
     {
         "name": "flarum/flarum-ext-emoji",
-        "version": "v0.1.0-beta.6",
-        "version_normalized": "0.1.0.0-beta6",
+        "version": "v0.1.0-beta.8",
+        "version_normalized": "0.1.0.0-beta8",
         "source": {
             "type": "git",
-            "url": "https://github.com/flarum/flarum-ext-emoji.git",
-            "reference": "733f40f2af313412fa4ce32d187dd7e7b5ce3828"
+            "url": "https://github.com/flarum/emoji.git",
+            "reference": "322023b28e3aaf594b32ab5ca4ac33581516ff5f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/flarum/flarum-ext-emoji/zipball/733f40f2af313412fa4ce32d187dd7e7b5ce3828",
-            "reference": "733f40f2af313412fa4ce32d187dd7e7b5ce3828",
+            "url": "https://api.github.com/repos/flarum/emoji/zipball/322023b28e3aaf594b32ab5ca4ac33581516ff5f",
+            "reference": "322023b28e3aaf594b32ab5ca4ac33581516ff5f",
             "shasum": ""
         },
         "require": {
-            "flarum/core": "^0.1.0-beta.6"
+            "flarum/core": "^0.1.0-beta.8"
         },
-        "time": "2016-10-19T10:42:56+00:00",
+        "time": "2018-11-21T08:27:14+00:00",
         "type": "flarum-extension",
         "extra": {
             "branch-alias": {
@@ -5275,11 +5277,6 @@
             }
         },
         "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Flarum\\Emoji\\": "src/"
-            }
-        },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
             "MIT"
@@ -5347,23 +5344,23 @@
     },
     {
         "name": "flarum/flarum-ext-likes",
-        "version": "v0.1.0-beta.6",
-        "version_normalized": "0.1.0.0-beta6",
+        "version": "v0.1.0-beta.8.1",
+        "version_normalized": "0.1.0.0-beta8.1",
         "source": {
             "type": "git",
-            "url": "https://github.com/flarum/flarum-ext-likes.git",
-            "reference": "b5fc66af26af088ec3db846748e72dd9ccbaaa8c"
+            "url": "https://github.com/flarum/likes.git",
+            "reference": "1959948594b0dc2daf987b70c442d6970f8aad7b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/flarum/flarum-ext-likes/zipball/b5fc66af26af088ec3db846748e72dd9ccbaaa8c",
-            "reference": "b5fc66af26af088ec3db846748e72dd9ccbaaa8c",
+            "url": "https://api.github.com/repos/flarum/likes/zipball/1959948594b0dc2daf987b70c442d6970f8aad7b",
+            "reference": "1959948594b0dc2daf987b70c442d6970f8aad7b",
             "shasum": ""
         },
         "require": {
-            "flarum/core": "^0.1.0-beta.6"
+            "flarum/core": "^0.1.0-beta.8"
         },
-        "time": "2016-10-19T10:43:14+00:00",
+        "time": "2018-12-03T23:51:00+00:00",
         "type": "flarum-extension",
         "extra": {
             "branch-alias": {
@@ -5372,7 +5369,7 @@
             "flarum-extension": {
                 "title": "Likes",
                 "icon": {
-                    "name": "thumbs-o-up",
+                    "name": "far fa-thumbs-up",
                     "backgroundColor": "#3A649D",
                     "color": "#fff"
                 }
@@ -5402,23 +5399,23 @@
     },
     {
         "name": "flarum/flarum-ext-lock",
-        "version": "v0.1.0-beta.7",
-        "version_normalized": "0.1.0.0-beta7",
+        "version": "v0.1.0-beta.8",
+        "version_normalized": "0.1.0.0-beta8",
         "source": {
             "type": "git",
-            "url": "https://github.com/flarum/flarum-ext-lock.git",
-            "reference": "33479b7e62edbd667d9c62ae53d3a26d6ec69fba"
+            "url": "https://github.com/flarum/lock.git",
+            "reference": "55d8589f36e5e87fc08c5eb32f34e610665038c2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/flarum/flarum-ext-lock/zipball/33479b7e62edbd667d9c62ae53d3a26d6ec69fba",
-            "reference": "33479b7e62edbd667d9c62ae53d3a26d6ec69fba",
+            "url": "https://api.github.com/repos/flarum/lock/zipball/55d8589f36e5e87fc08c5eb32f34e610665038c2",
+            "reference": "55d8589f36e5e87fc08c5eb32f34e610665038c2",
             "shasum": ""
         },
         "require": {
-            "flarum/core": "^0.1.0-beta.7"
+            "flarum/core": "^0.1.0-beta.8"
         },
-        "time": "2017-07-22T02:48:15+00:00",
+        "time": "2018-11-27T12:03:38+00:00",
         "type": "flarum-extension",
         "extra": {
             "branch-alias": {
@@ -5427,7 +5424,7 @@
             "flarum-extension": {
                 "title": "Lock",
                 "icon": {
-                    "name": "lock",
+                    "name": "fas fa-lock",
                     "backgroundColor": "#ddd",
                     "color": "#666"
                 }
@@ -5457,23 +5454,23 @@
     },
     {
         "name": "flarum/flarum-ext-markdown",
-        "version": "v0.1.0-beta.5",
-        "version_normalized": "0.1.0.0-beta5",
+        "version": "v0.1.0-beta.8",
+        "version_normalized": "0.1.0.0-beta8",
         "source": {
             "type": "git",
-            "url": "https://github.com/flarum/flarum-ext-markdown.git",
-            "reference": "48cf69decea8c7bcb7a8b513ca505d8bfb48f0d2"
+            "url": "https://github.com/flarum/markdown.git",
+            "reference": "fd67301b9eb18009bf548ffa601d0d61b8d71e8b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/flarum/flarum-ext-markdown/zipball/48cf69decea8c7bcb7a8b513ca505d8bfb48f0d2",
-            "reference": "48cf69decea8c7bcb7a8b513ca505d8bfb48f0d2",
+            "url": "https://api.github.com/repos/flarum/markdown/zipball/fd67301b9eb18009bf548ffa601d0d61b8d71e8b",
+            "reference": "fd67301b9eb18009bf548ffa601d0d61b8d71e8b",
             "shasum": ""
         },
         "require": {
-            "flarum/core": "^0.1.0-beta.5"
+            "flarum/core": "^0.1.0-beta.8"
         },
-        "time": "2016-03-29T08:17:28+00:00",
+        "time": "2018-11-21T08:27:14+00:00",
         "type": "flarum-extension",
         "extra": {
             "branch-alias": {
@@ -5492,11 +5489,6 @@
             }
         },
         "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Flarum\\Markdown\\": "src/"
-            }
-        },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
             "MIT"
@@ -5515,23 +5507,23 @@
     },
     {
         "name": "flarum/flarum-ext-mentions",
-        "version": "v0.1.0-beta.7",
-        "version_normalized": "0.1.0.0-beta7",
+        "version": "v0.1.0-beta.8.1",
+        "version_normalized": "0.1.0.0-beta8.1",
         "source": {
             "type": "git",
-            "url": "https://github.com/flarum/flarum-ext-mentions.git",
-            "reference": "0ad97e02383afd205aba5c94f903bdc3cd15beb9"
+            "url": "https://github.com/flarum/mentions.git",
+            "reference": "af80a637a0d7b5250150e9f6ba52512decb709a7"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/flarum/flarum-ext-mentions/zipball/0ad97e02383afd205aba5c94f903bdc3cd15beb9",
-            "reference": "0ad97e02383afd205aba5c94f903bdc3cd15beb9",
+            "url": "https://api.github.com/repos/flarum/mentions/zipball/af80a637a0d7b5250150e9f6ba52512decb709a7",
+            "reference": "af80a637a0d7b5250150e9f6ba52512decb709a7",
             "shasum": ""
         },
         "require": {
-            "flarum/core": "^0.1.0-beta.6"
+            "flarum/core": "^0.1.0-beta.8"
         },
-        "time": "2017-06-28T22:56:15+00:00",
+        "time": "2018-12-03T23:43:48+00:00",
         "type": "flarum-extension",
         "extra": {
             "branch-alias": {
@@ -5540,7 +5532,7 @@
             "flarum-extension": {
                 "title": "Mentions",
                 "icon": {
-                    "name": "at",
+                    "name": "fas fa-at",
                     "backgroundColor": "#539EC1",
                     "color": "#fff"
                 }
@@ -5616,24 +5608,24 @@
     },
     {
         "name": "flarum/flarum-ext-pusher",
-        "version": "v0.1.0-beta.6",
-        "version_normalized": "0.1.0.0-beta6",
+        "version": "v0.1.0-beta.8.1",
+        "version_normalized": "0.1.0.0-beta8.1",
         "source": {
             "type": "git",
-            "url": "https://github.com/flarum/flarum-ext-pusher.git",
-            "reference": "77ad23b242994e923da1542839d37d960a8fdc43"
+            "url": "https://github.com/flarum/pusher.git",
+            "reference": "657c69890674e81f6f225e7962940f25122c5d9a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/flarum/flarum-ext-pusher/zipball/77ad23b242994e923da1542839d37d960a8fdc43",
-            "reference": "77ad23b242994e923da1542839d37d960a8fdc43",
+            "url": "https://api.github.com/repos/flarum/pusher/zipball/657c69890674e81f6f225e7962940f25122c5d9a",
+            "reference": "657c69890674e81f6f225e7962940f25122c5d9a",
             "shasum": ""
         },
         "require": {
-            "flarum/core": "^0.1.0-beta.6",
+            "flarum/core": "^0.1.0-beta.8",
             "pusher/pusher-php-server": "^2.2"
         },
-        "time": "2016-10-19T10:43:35+00:00",
+        "time": "2018-12-03T23:52:29+00:00",
         "type": "flarum-extension",
         "extra": {
             "branch-alias": {
@@ -5643,7 +5635,7 @@
                 "title": "Pusher",
                 "icon": {
                     "image": "icon.png",
-                    "backgroundSize": "55px 75px",
+                    "backgroundSize": "46% 63%",
                     "backgroundPosition": "center",
                     "backgroundRepeat": "no-repeat",
                     "backgroundColor": "#40bad8",
@@ -5675,23 +5667,23 @@
     },
     {
         "name": "flarum/flarum-ext-sticky",
-        "version": "v0.1.0-beta.7",
-        "version_normalized": "0.1.0.0-beta7",
+        "version": "v0.1.0-beta.8",
+        "version_normalized": "0.1.0.0-beta8",
         "source": {
             "type": "git",
-            "url": "https://github.com/flarum/flarum-ext-sticky.git",
-            "reference": "2071a1c91c056121c9f4cf022ff43895c671650f"
+            "url": "https://github.com/flarum/sticky.git",
+            "reference": "c85e9a0191da8004f54f2a1916e41471f83f19ca"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/flarum/flarum-ext-sticky/zipball/2071a1c91c056121c9f4cf022ff43895c671650f",
-            "reference": "2071a1c91c056121c9f4cf022ff43895c671650f",
+            "url": "https://api.github.com/repos/flarum/sticky/zipball/c85e9a0191da8004f54f2a1916e41471f83f19ca",
+            "reference": "c85e9a0191da8004f54f2a1916e41471f83f19ca",
             "shasum": ""
         },
         "require": {
-            "flarum/core": "^0.1.0-beta.7"
+            "flarum/core": "^0.1.0-beta.8"
         },
-        "time": "2017-07-22T02:47:30+00:00",
+        "time": "2018-11-27T12:04:00+00:00",
         "type": "flarum-extension",
         "extra": {
             "branch-alias": {
@@ -5700,7 +5692,7 @@
             "flarum-extension": {
                 "title": "Sticky",
                 "icon": {
-                    "name": "thumb-tack",
+                    "name": "fas fa-thumbtack",
                     "backgroundColor": "#D13E32",
                     "color": "#fff"
                 }
@@ -5730,23 +5722,23 @@
     },
     {
         "name": "flarum/flarum-ext-subscriptions",
-        "version": "v0.1.0-beta.6",
-        "version_normalized": "0.1.0.0-beta6",
+        "version": "v0.1.0-beta.8",
+        "version_normalized": "0.1.0.0-beta8",
         "source": {
             "type": "git",
-            "url": "https://github.com/flarum/flarum-ext-subscriptions.git",
-            "reference": "1102fdc5dcdded2c932b06f3976bec9ceb866daf"
+            "url": "https://github.com/flarum/subscriptions.git",
+            "reference": "7fae63a5279aed01678d01e23d293817ce115466"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/flarum/flarum-ext-subscriptions/zipball/1102fdc5dcdded2c932b06f3976bec9ceb866daf",
-            "reference": "1102fdc5dcdded2c932b06f3976bec9ceb866daf",
+            "url": "https://api.github.com/repos/flarum/subscriptions/zipball/7fae63a5279aed01678d01e23d293817ce115466",
+            "reference": "7fae63a5279aed01678d01e23d293817ce115466",
             "shasum": ""
         },
         "require": {
-            "flarum/core": "^0.1.0-beta.6"
+            "flarum/core": "^0.1.0-beta.8"
         },
-        "time": "2016-10-19T10:43:45+00:00",
+        "time": "2018-11-21T11:34:52+00:00",
         "type": "flarum-extension",
         "extra": {
             "branch-alias": {
@@ -5755,7 +5747,7 @@
             "flarum-extension": {
                 "title": "Subscriptions",
                 "icon": {
-                    "name": "star",
+                    "name": "fas fa-star",
                     "backgroundColor": "#ffea7b",
                     "color": "#de8e00"
                 }
@@ -5785,23 +5777,23 @@
     },
     {
         "name": "flarum/flarum-ext-suspend",
-        "version": "v0.1.0-beta.7",
-        "version_normalized": "0.1.0.0-beta7",
+        "version": "v0.1.0-beta.8",
+        "version_normalized": "0.1.0.0-beta8",
         "source": {
             "type": "git",
-            "url": "https://github.com/flarum/flarum-ext-suspend.git",
-            "reference": "032c029e2368daa28068812e64d96b6b0199b818"
+            "url": "https://github.com/flarum/suspend.git",
+            "reference": "fcb2d4657af3123d2a8a3d0e223b43df0ed1b7a3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/flarum/flarum-ext-suspend/zipball/032c029e2368daa28068812e64d96b6b0199b818",
-            "reference": "032c029e2368daa28068812e64d96b6b0199b818",
+            "url": "https://api.github.com/repos/flarum/suspend/zipball/fcb2d4657af3123d2a8a3d0e223b43df0ed1b7a3",
+            "reference": "fcb2d4657af3123d2a8a3d0e223b43df0ed1b7a3",
             "shasum": ""
         },
         "require": {
-            "flarum/core": "^0.1.0-beta.7"
+            "flarum/core": "^0.1.0-beta.8"
         },
-        "time": "2017-07-22T02:46:24+00:00",
+        "time": "2018-11-21T08:27:15+00:00",
         "type": "flarum-extension",
         "extra": {
             "branch-alias": {
@@ -5810,7 +5802,7 @@
             "flarum-extension": {
                 "title": "Suspend",
                 "icon": {
-                    "name": "ban",
+                    "name": "fas fa-ban",
                     "backgroundColor": "#ddd",
                     "color": "#666"
                 }
@@ -5840,23 +5832,23 @@
     },
     {
         "name": "flarum/flarum-ext-tags",
-        "version": "v0.1.0-beta.8",
-        "version_normalized": "0.1.0.0-beta8",
+        "version": "v0.1.0-beta.8.2",
+        "version_normalized": "0.1.0.0-beta8.2",
         "source": {
             "type": "git",
-            "url": "https://github.com/flarum/flarum-ext-tags.git",
-            "reference": "f40a053f8a5196e6aa354c20d011364982f7dc4a"
+            "url": "https://github.com/flarum/tags.git",
+            "reference": "58af69d4ea320e22f9e7ba2e3fdf13e2cb5cb96e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/flarum/flarum-ext-tags/zipball/f40a053f8a5196e6aa354c20d011364982f7dc4a",
-            "reference": "f40a053f8a5196e6aa354c20d011364982f7dc4a",
+            "url": "https://api.github.com/repos/flarum/tags/zipball/58af69d4ea320e22f9e7ba2e3fdf13e2cb5cb96e",
+            "reference": "58af69d4ea320e22f9e7ba2e3fdf13e2cb5cb96e",
             "shasum": ""
         },
         "require": {
-            "flarum/core": "^0.1.0-beta.7"
+            "flarum/core": "^0.1.0-beta.8"
         },
-        "time": "2017-07-22T02:45:22+00:00",
+        "time": "2018-12-05T23:34:15+00:00",
         "type": "flarum-extension",
         "extra": {
             "branch-alias": {
@@ -5865,7 +5857,7 @@
             "flarum-extension": {
                 "title": "Tags",
                 "icon": {
-                    "name": "tags",
+                    "name": "fas fa-tags",
                     "backgroundColor": "#F28326",
                     "color": "#fff"
                 }

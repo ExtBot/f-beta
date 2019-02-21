@@ -11,12 +11,11 @@
 
 namespace Flarum\Tags\Listener;
 
+use Flarum\Discussion\Event\Searching;
 use Flarum\Event\ConfigureDiscussionGambits;
-use Flarum\Event\ConfigureDiscussionSearch;
 use Flarum\Tags\Gambit\TagGambit;
 use Flarum\Tags\Tag;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\Query\Expression;
 
 class FilterDiscussionListByTags
 {
@@ -26,7 +25,7 @@ class FilterDiscussionListByTags
     public function subscribe(Dispatcher $events)
     {
         $events->listen(ConfigureDiscussionGambits::class, [$this, 'addTagGambit']);
-        $events->listen(ConfigureDiscussionSearch::class, [$this, 'hideTagsFromDiscussionList']);
+        $events->listen(Searching::class, [$this, 'hideTagsFromDiscussionList']);
     }
 
     /**
@@ -38,9 +37,9 @@ class FilterDiscussionListByTags
     }
 
     /**
-     * @param ConfigureDiscussionSearch $event
+     * @param Searching $event
      */
-    public function hideTagsFromDiscussionList(ConfigureDiscussionSearch $event)
+    public function hideTagsFromDiscussionList(Searching $event)
     {
         $query = $event->search->getQuery();
 
@@ -51,10 +50,10 @@ class FilterDiscussionListByTags
         }
 
         $query->whereNotExists(function ($query) {
-            return $query->select(new Expression(1))
-                ->from('discussions_tags')
-                ->whereIn('tag_id', Tag::where('is_hidden', 1)->lists('id'))
-                ->where('discussions.id', new Expression('discussion_id'));
+            return $query->selectRaw('1')
+                ->from('discussion_tag')
+                ->whereIn('tag_id', Tag::where('is_hidden', 1)->pluck('id'))
+                ->whereColumn('discussions.id', 'discussion_id');
         });
     }
 }

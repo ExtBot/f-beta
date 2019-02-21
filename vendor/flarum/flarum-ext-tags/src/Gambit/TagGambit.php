@@ -11,10 +11,9 @@
 
 namespace Flarum\Tags\Gambit;
 
-use Flarum\Core\Search\AbstractRegexGambit;
-use Flarum\Core\Search\AbstractSearch;
+use Flarum\Search\AbstractRegexGambit;
+use Flarum\Search\AbstractSearch;
 use Flarum\Tags\TagRepository;
-use Illuminate\Database\Query\Expression;
 
 class TagGambit extends AbstractRegexGambit
 {
@@ -43,24 +42,23 @@ class TagGambit extends AbstractRegexGambit
     {
         $slugs = explode(',', trim($matches[1], '"'));
 
-        // TODO: implement $negate
-        $search->getQuery()->where(function ($query) use ($slugs) {
+        $search->getQuery()->where(function ($query) use ($slugs, $negate) {
             foreach ($slugs as $slug) {
                 if ($slug === 'untagged') {
-                    $query->orWhereNotExists(function ($query) {
-                        $query->select(new Expression(1))
-                              ->from('discussions_tags')
-                              ->where('discussions.id', new Expression('discussion_id'));
-                    });
+                    $query->orWhereExists(function ($query) {
+                        $query->selectRaw('1')
+                              ->from('discussion_tag')
+                              ->whereColumn('discussions.id', 'discussion_id');
+                    }, ! $negate);
                 } else {
                     $id = $this->tags->getIdForSlug($slug);
 
                     $query->orWhereExists(function ($query) use ($id) {
-                        $query->select(new Expression(1))
-                              ->from('discussions_tags')
-                              ->where('discussions.id', new Expression('discussion_id'))
+                        $query->selectRaw('1')
+                              ->from('discussion_tag')
+                              ->whereColumn('discussions.id', 'discussion_id')
                               ->where('tag_id', $id);
-                    });
+                    }, $negate);
                 }
             }
         });

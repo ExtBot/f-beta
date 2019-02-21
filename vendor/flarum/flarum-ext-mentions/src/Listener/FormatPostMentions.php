@@ -11,11 +11,12 @@
 
 namespace Flarum\Mentions\Listener;
 
-use Flarum\Core\Post\CommentPost;
-use Flarum\Event\ConfigureFormatter;
-use Flarum\Event\ConfigureFormatterRenderer;
-use Flarum\Forum\UrlGenerator;
+use Flarum\Formatter\Event\Configuring;
+use Flarum\Formatter\Event\Rendering;
+use Flarum\Http\UrlGenerator;
+use Flarum\Post\CommentPost;
 use Illuminate\Contracts\Events\Dispatcher;
+use s9e\TextFormatter\Utils;
 
 class FormatPostMentions
 {
@@ -37,43 +38,53 @@ class FormatPostMentions
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(ConfigureFormatter::class, [$this, 'configure']);
-        $events->listen(ConfigureFormatterRenderer::class, [$this, 'render']);
+        $events->listen(Configuring::class, [$this, 'configure']);
+        $events->listen(Rendering::class, [$this, 'render']);
     }
 
     /**
-     * @param ConfigureFormatter $event
+     * @param Configuring $event
      */
-    public function configure(ConfigureFormatter $event)
+    public function configure(Configuring $event)
     {
         $configurator = $event->configurator;
+
+        $configurator->rendering->parameters['DISCUSSION_URL'] = $this->url->to('forum')->route('discussion', ['id' => '']);
 
         $tagName = 'POSTMENTION';
 
         $tag = $configurator->tags->add($tagName);
 
         $tag->attributes->add('username');
+        $tag->attributes->add('displayname');
         $tag->attributes->add('number')->filterChain->append('#uint');
         $tag->attributes->add('discussionid')->filterChain->append('#uint');
         $tag->attributes->add('id')->filterChain->append('#uint');
-        $tag->attributes['number']->required = false;
-        $tag->attributes['discussionid']->required = false;
 
-        $tag->template = '<a href="{$DISCUSSION_URL}{@discussionid}/{@number}" class="PostMention" data-id="{@id}"><xsl:value-of select="@username"/></a>';
+        $tag->template = '<a href="{$DISCUSSION_URL}{@discussionid}/{@number}" class="PostMention" data-id="{@id}"><xsl:value-of select="@displayname"/></a>';
 
         $tag->filterChain
             ->prepend([static::class, 'addId'])
-            ->setJS('function() { return true; }');
+            ->setJS('function(tag) { return flarum.extensions["flarum-mentions"].filterPostMentions(tag); }');
 
         $configurator->Preg->match('/\B@(?<username>[a-z0-9_-]+)#(?<id>\d+)/i', $tagName);
     }
 
     /**
-     * @param ConfigureFormatterRenderer $event
+     * @param Rendering $event
      */
-    public function render(ConfigureFormatterRenderer $event)
+    public function render(Rendering $event)
     {
-        $event->renderer->setParameter('DISCUSSION_URL', $this->url->toRoute('discussion', ['id' => '']));
+        $post = $event->context;
+
+        $event->xml = Utils::replaceAttributes($event->xml, 'POSTMENTION', function ($attributes) use ($post) {
+            $post = $post->mentionsPosts->find($attributes['id']);
+            if ($post && $post->user) {
+                $attributes['displayname'] = $post->user->display_name;
+            }
+
+            return $attributes;
+        });
     }
 
     /**
@@ -87,6 +98,7 @@ class FormatPostMentions
         if ($post) {
             $tag->setAttribute('discussionid', (int) $post->discussion_id);
             $tag->setAttribute('number', (int) $post->number);
+            $tag->setAttribute('displayname', $post->user->display_name);
 
             return true;
         }

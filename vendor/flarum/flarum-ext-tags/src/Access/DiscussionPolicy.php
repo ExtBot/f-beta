@@ -12,15 +12,12 @@
 namespace Flarum\Tags\Access;
 
 use Carbon\Carbon;
-use Flarum\Core\Access\AbstractPolicy;
-use Flarum\Core\Discussion;
-use Flarum\Core\User;
-use Flarum\Event\ScopeHiddenDiscussionVisibility;
+use Flarum\Discussion\Discussion;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\Tags\Tag;
-use Illuminate\Contracts\Events\Dispatcher;
+use Flarum\User\AbstractPolicy;
+use Flarum\User\User;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\Expression;
 
 class DiscussionPolicy extends AbstractPolicy
 {
@@ -43,22 +40,12 @@ class DiscussionPolicy extends AbstractPolicy
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function subscribe(Dispatcher $events)
-    {
-        parent::subscribe($events);
-
-        $events->listen(ScopeHiddenDiscussionVisibility::class, [$this, 'scopeHiddenDiscussionVisibility']);
-    }
-
-    /**
      * @param User $actor
      * @param string $ability
      * @param Discussion $discussion
      * @return bool
      */
-    public function after(User $actor, $ability, Discussion $discussion)
+    public function can(User $actor, $ability, Discussion $discussion)
     {
         // Wrap all discussion permission checks with some logic pertaining to
         // the discussion's tags. If the discussion has a tag that has been
@@ -92,10 +79,10 @@ class DiscussionPolicy extends AbstractPolicy
     {
         // Hide discussions which have tags that the user is not allowed to see.
         $query->whereNotExists(function ($query) use ($actor) {
-            return $query->select(new Expression(1))
-                ->from('discussions_tags')
+            return $query->selectRaw('1')
+                ->from('discussion_tag')
                 ->whereIn('tag_id', Tag::getIdsWhereCannot($actor, 'viewDiscussions'))
-                ->where('discussions.id', new Expression('discussion_id'));
+                ->whereColumn('discussions.id', 'discussion_id');
         });
 
         // Hide discussions with no tags if the user doesn't have that global
@@ -106,20 +93,20 @@ class DiscussionPolicy extends AbstractPolicy
     }
 
     /**
-     * @param ScopeHiddenDiscussionVisibility $event
+     * @param User $actor
+     * @param Builder $query
+     * @param string $ability
      */
-    public function scopeHiddenDiscussionVisibility(ScopeHiddenDiscussionVisibility $event)
+    public function findWithPermission(User $actor, Builder $query, $ability)
     {
-        // By default, discussions are not visible to the public if they are
-        // hidden or contain zero comments - unless the actor has a certain
-        // permission. Since we grant permissions per-tag, we will make
-        // discussions visible in the tags for which the user has that
-        // permission.
-        $event->query->orWhereExists(function ($query) use ($event) {
-            return $query->select(new Expression(1))
-                ->from('discussions_tags')
-                ->whereIn('tag_id', Tag::getIdsWhereCan($event->actor, $event->permission))
-                ->where('discussions.id', new Expression('discussion_id'));
+        // If a discussion requires a certain permission in order for it to be
+        // visible, then we can check if the user has been granted that
+        // permission for any of the discussion's tags.
+        $query->whereExists(function ($query) use ($actor, $ability) {
+            return $query->selectRaw('1')
+                ->from('discussion_tag')
+                ->whereIn('tag_id', Tag::getIdsWhereCan($actor, 'discussion.'.$ability))
+                ->whereColumn('discussions.id', 'discussion_id');
         });
     }
 
@@ -133,12 +120,12 @@ class DiscussionPolicy extends AbstractPolicy
      */
     public function tag(User $actor, Discussion $discussion)
     {
-        if ($discussion->start_user_id == $actor->id) {
+        if ($discussion->user_id == $actor->id && $actor->can('reply', $discussion)) {
             $allowEditTags = $this->settings->get('allow_tag_change');
 
             if ($allowEditTags === '-1'
-                || ($allowEditTags === 'reply' && $discussion->participants_count <= 1)
-                || ($discussion->start_time->diffInMinutes(new Carbon) < $allowEditTags)
+                || ($allowEditTags === 'reply' && $discussion->participant_count <= 1)
+                || (is_numeric($allowEditTags) && $discussion->created_at->diffInMinutes(new Carbon) < $allowEditTags)
             ) {
                 return true;
             }

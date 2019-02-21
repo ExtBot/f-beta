@@ -11,9 +11,9 @@
 
 namespace Flarum\Mentions\Notification;
 
-use Flarum\Core\Notification\BlueprintInterface;
-use Flarum\Core\Notification\MailableInterface;
-use Flarum\Core\Post;
+use Flarum\Notification\Blueprint\BlueprintInterface;
+use Flarum\Notification\MailableInterface;
+use Flarum\Post\Post;
 
 class UserMentionedBlueprint implements BlueprintInterface, MailableInterface
 {
@@ -41,7 +41,7 @@ class UserMentionedBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getSender()
+    public function getFromUser()
     {
         return $this->post->user;
     }

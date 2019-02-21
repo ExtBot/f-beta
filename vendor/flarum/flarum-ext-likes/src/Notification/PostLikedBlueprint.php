@@ -11,9 +11,9 @@
 
 namespace Flarum\Likes\Notification;
 
-use Flarum\Core\Notification\BlueprintInterface;
-use Flarum\Core\Post;
-use Flarum\Core\User;
+use Flarum\Notification\Blueprint\BlueprintInterface;
+use Flarum\Post\Post;
+use Flarum\User\User;
 
 class PostLikedBlueprint implements BlueprintInterface
 {
@@ -48,7 +48,7 @@ class PostLikedBlueprint implements BlueprintInterface
     /**
      * {@inheritdoc}
      */
-    public function getSender()
+    public function getFromUser()
     {
         return $this->user;
     }

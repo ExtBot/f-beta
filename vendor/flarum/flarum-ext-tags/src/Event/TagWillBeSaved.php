@@ -11,8 +11,8 @@
 
 namespace Flarum\Tags\Event;
 
-use Flarum\Core\User;
 use Flarum\Tags\Tag;
+use Flarum\User\User;
 
 class TagWillBeSaved
 {
@@ -32,9 +32,9 @@ class TagWillBeSaved
     public $data;
 
     /**
-     * @param Discussion $discussion
+     * @param Tag $tag
      * @param User $actor
-     * @param \Flarum\Tags\Tag[] $tag
+     * @param array $data
      */
     public function __construct(Tag $tag, User $actor, array $data)
     {

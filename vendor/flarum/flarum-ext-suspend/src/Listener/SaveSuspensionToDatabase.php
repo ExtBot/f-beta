@@ -12,9 +12,11 @@
 namespace Flarum\Suspend\Listener;
 
 use DateTime;
-use Flarum\Core\Access\AssertPermissionTrait;
-use Flarum\Event\UserWillBeSaved;
+use Flarum\Suspend\Event\Suspended;
+use Flarum\Suspend\Event\Unsuspended;
 use Flarum\Suspend\SuspendValidator;
+use Flarum\User\AssertPermissionTrait;
+use Flarum\User\Event\Saving;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class SaveSuspensionToDatabase
@@ -27,13 +29,19 @@ class SaveSuspensionToDatabase
      * @var SuspendValidator
      */
     protected $validator;
+    /**
+     * @var Dispatcher
+     */
+    protected $events;
 
     /**
      * @param SuspendValidator $validator
+     * @param Dispatcher $events
      */
-    public function __construct(SuspendValidator $validator)
+    public function __construct(SuspendValidator $validator, Dispatcher $events)
     {
         $this->validator = $validator;
+        $this->events = $events;
     }
 
     /**
@@ -41,17 +49,17 @@ class SaveSuspensionToDatabase
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(UserWillBeSaved::class, [$this, 'whenUserWillBeSaved']);
+        $events->listen(Saving::class, [$this, 'whenSavingUser']);
     }
 
     /**
-     * @param UserWillBeSaved $event
+     * @param Saving $event
      */
-    public function whenUserWillBeSaved(UserWillBeSaved $event)
+    public function whenSavingUser(Saving $event)
     {
         $attributes = array_get($event->data, 'attributes', []);
 
-        if (array_key_exists('suspendUntil', $attributes)) {
+        if (array_key_exists('suspendedUntil', $attributes)) {
             $this->validator->assertValid($attributes);
 
             $user = $event->user;
@@ -59,7 +67,17 @@ class SaveSuspensionToDatabase
 
             $this->assertCan($actor, 'suspend', $user);
 
-            $user->suspend_until = new DateTime($attributes['suspendUntil']);
+            $user->suspended_until = $attributes['suspendedUntil']
+                ? new DateTime($attributes['suspendedUntil'])
+                : null;
+
+            if ($user->isDirty('suspended_until')) {
+                $this->events->dispatch(
+                    $user->suspended_until === null ?
+                        new Unsuspended($user, $actor) :
+                        new Suspended($user, $actor)
+                );
+            }
         }
     }
 }

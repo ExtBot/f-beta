@@ -11,12 +11,11 @@
 
 namespace Flarum\Tags\Access;
 
-use Flarum\Core\Access\AbstractPolicy;
-use Flarum\Core\User;
 use Flarum\Flags\Flag;
 use Flarum\Tags\Tag;
+use Flarum\User\AbstractPolicy;
+use Flarum\User\User;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\Expression;
 
 class FlagPolicy extends AbstractPolicy
 {
@@ -36,10 +35,10 @@ class FlagPolicy extends AbstractPolicy
             ->leftJoin('posts', 'posts.id', '=', 'flags.post_id')
             ->leftJoin('discussions', 'discussions.id', '=', 'posts.discussion_id')
             ->whereNotExists(function ($query) use ($actor) {
-                return $query->select(new Expression(1))
-                    ->from('discussions_tags')
+                return $query->selectRaw('1')
+                    ->from('discussion_tag')
                     ->whereIn('tag_id', Tag::getIdsWhereCannot($actor, 'discussion.viewFlags'))
-                    ->where('discussions.id', new Expression('discussion_id'));
+                    ->whereColumn('discussions.id', 'discussion_id');
             });
     }
 }

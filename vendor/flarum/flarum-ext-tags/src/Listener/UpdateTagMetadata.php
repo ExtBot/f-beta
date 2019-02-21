@@ -11,12 +11,12 @@
 
 namespace Flarum\Tags\Listener;
 
-use Flarum\Event\DiscussionWasDeleted;
-use Flarum\Event\DiscussionWasStarted;
-use Flarum\Event\PostWasDeleted;
-use Flarum\Event\PostWasHidden;
-use Flarum\Event\PostWasPosted;
-use Flarum\Event\PostWasRestored;
+use Flarum\Discussion\Event\Deleted;
+use Flarum\Discussion\Event\Started;
+use Flarum\Post\Event\Deleted as PostDeleted;
+use Flarum\Post\Event\Hidden;
+use Flarum\Post\Event\Posted;
+use Flarum\Post\Event\Restored;
 use Flarum\Tags\Event\DiscussionWasTagged;
 use Flarum\Tags\Tag;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -28,20 +28,20 @@ class UpdateTagMetadata
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(DiscussionWasStarted::class, [$this, 'whenDiscussionWasStarted']);
+        $events->listen(Started::class, [$this, 'whenDiscussionIsStarted']);
         $events->listen(DiscussionWasTagged::class, [$this, 'whenDiscussionWasTagged']);
-        $events->listen(DiscussionWasDeleted::class, [$this, 'whenDiscussionWasDeleted']);
+        $events->listen(Deleted::class, [$this, 'whenDiscussionIsDeleted']);
 
-        $events->listen(PostWasPosted::class, [$this, 'whenPostWasPosted']);
-        $events->listen(PostWasDeleted::class, [$this, 'whenPostWasDeleted']);
-        $events->listen(PostWasHidden::class, [$this, 'whenPostWasHidden']);
-        $events->listen(PostWasRestored::class, [$this, 'whenPostWasRestored']);
+        $events->listen(Posted::class, [$this, 'whenPostIsPosted']);
+        $events->listen(PostDeleted::class, [$this, 'whenPostIsDeleted']);
+        $events->listen(Hidden::class, [$this, 'whenPostIsHidden']);
+        $events->listen(Restored::class, [$this, 'whenPostIsRestored']);
     }
 
     /**
-     * @param DiscussionWasStarted $event
+     * @param Started $event
      */
-    public function whenDiscussionWasStarted(DiscussionWasStarted $event)
+    public function whenDiscussionIsStarted(Started $event)
     {
         $this->updateTags($event->discussion, 1);
     }
@@ -58,9 +58,9 @@ class UpdateTagMetadata
     }
 
     /**
-     * @param DiscussionWasDeleted $event
+     * @param Deleted $event
      */
-    public function whenDiscussionWasDeleted(DiscussionWasDeleted $event)
+    public function whenDiscussionIsDeleted(Deleted $event)
     {
         $this->updateTags($event->discussion, -1);
 
@@ -68,39 +68,39 @@ class UpdateTagMetadata
     }
 
     /**
-     * @param PostWasPosted $event
+     * @param Posted $event
      */
-    public function whenPostWasPosted(PostWasPosted $event)
+    public function whenPostIsPosted(Posted $event)
     {
         $this->updateTags($event->post->discussion);
     }
 
     /**
-     * @param PostWasDeleted $event
+     * @param Deleted $event
      */
-    public function whenPostWasDeleted(PostWasDeleted $event)
+    public function whenPostIsDeleted(PostDeleted $event)
     {
         $this->updateTags($event->post->discussion);
     }
 
     /**
-     * @param PostWasHidden $event
+     * @param Hidden $event
      */
-    public function whenPostWasHidden(PostWasHidden $event)
+    public function whenPostIsHidden(Hidden $event)
     {
         $this->updateTags($event->post->discussion);
     }
 
     /**
-     * @param PostWasRestored $event
+     * @param Restored $event
      */
-    public function whenPostWasRestored(PostWasRestored $event)
+    public function whenPostIsRestored(Restored $event)
     {
         $this->updateTags($event->post->discussion);
     }
 
     /**
-     * @param \Flarum\Core\Discussion $discussion
+     * @param \Flarum\Discussion\Discussion $discussion
      * @param int $delta
      * @param Tag[]|null $tags
      */
@@ -110,17 +110,22 @@ class UpdateTagMetadata
             return;
         }
 
+        // We do not count private discussions in tags
+        if ($discussion->is_private) {
+            return;
+        }
+
         if (! $tags) {
             $tags = $discussion->tags;
         }
 
         foreach ($tags as $tag) {
-            $tag->discussions_count += $delta;
+            $tag->discussion_count += $delta;
 
-            if ($discussion->last_time > $tag->last_time) {
-                $tag->setLastDiscussion($discussion);
-            } elseif ($discussion->id == $tag->last_discussion_id) {
-                $tag->refreshLastDiscussion();
+            if ($discussion->last_posted_at > $tag->last_posted_at) {
+                $tag->setLastPostedDiscussion($discussion);
+            } elseif ($discussion->id == $tag->last_posted_discussion_id) {
+                $tag->refreshLastPostedDiscussion();
             }
 
             $tag->save();

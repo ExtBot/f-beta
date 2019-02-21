@@ -11,9 +11,9 @@
 
 namespace Flarum\Tags;
 
-use Flarum\Core\Support\EventGeneratorTrait;
-use Flarum\Core\User;
 use Flarum\Database\AbstractModel;
+use Flarum\Foundation\EventGeneratorTrait;
+use Flarum\User\User;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -31,12 +31,12 @@ class TagState extends AbstractModel
     /**
      * {@inheritdoc}
      */
-    protected $table = 'users_tags';
+    protected $table = 'tag_user';
 
     /**
      * {@inheritdoc}
      */
-    protected $dates = ['read_time'];
+    protected $dates = ['marked_as_read_at'];
 
     /**
      * Define the relationship with the tag that this state is for.
@@ -45,7 +45,7 @@ class TagState extends AbstractModel
      */
     public function tag()
     {
-        return $this->belongsTo(Tag::class, 'tag_id');
+        return $this->belongsTo(Tag::class);
     }
 
     /**
@@ -55,7 +55,7 @@ class TagState extends AbstractModel
      */
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
     }
 
     /**

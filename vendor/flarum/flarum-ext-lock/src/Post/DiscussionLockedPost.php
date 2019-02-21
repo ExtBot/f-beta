@@ -11,9 +11,9 @@
 
 namespace Flarum\Lock\Post;
 
-use Flarum\Core\Post;
-use Flarum\Core\Post\AbstractEventPost;
-use Flarum\Core\Post\MergeableInterface;
+use Flarum\Post\AbstractEventPost;
+use Flarum\Post\MergeableInterface;
+use Flarum\Post\Post;
 
 class DiscussionLockedPost extends AbstractEventPost implements MergeableInterface
 {
@@ -61,7 +61,7 @@ class DiscussionLockedPost extends AbstractEventPost implements MergeableInterfa
         $post = new static;
 
         $post->content = static::buildContent($isLocked);
-        $post->time = time();
+        $post->created_at = time();
         $post->discussion_id = $discussionId;
         $post->user_id = $userId;
 

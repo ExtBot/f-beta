@@ -11,32 +11,25 @@
 
 namespace Flarum\Mentions\Listener;
 
-use Flarum\Core\Repository\UserRepository;
-use Flarum\Event\ConfigureFormatter;
-use Flarum\Event\ConfigureFormatterParser;
-use Flarum\Event\ConfigureFormatterRenderer;
-use Flarum\Forum\UrlGenerator;
+use Flarum\Formatter\Event\Configuring;
+use Flarum\Formatter\Event\Rendering;
+use Flarum\Http\UrlGenerator;
+use Flarum\User\User;
 use Illuminate\Contracts\Events\Dispatcher;
+use s9e\TextFormatter\Utils;
 
 class FormatUserMentions
 {
-    /**
-     * @var UserRepository
-     */
-    protected $users;
-
     /**
      * @var UrlGenerator
      */
     protected $url;
 
     /**
-     * @param UserRepository $users
      * @param UrlGenerator $url
      */
-    public function __construct(UserRepository $users, UrlGenerator $url)
+    public function __construct(UrlGenerator $url)
     {
-        $this->users = $users;
         $this->url = $url;
     }
 
@@ -45,58 +38,61 @@ class FormatUserMentions
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(ConfigureFormatter::class, [$this, 'configure']);
-        $events->listen(ConfigureFormatterParser::class, [$this, 'parse']);
-        $events->listen(ConfigureFormatterRenderer::class, [$this, 'render']);
+        $events->listen(Configuring::class, [$this, 'configure']);
+        $events->listen(Rendering::class, [$this, 'render']);
     }
 
     /**
-     * @param ConfigureFormatter $event
+     * @param Configuring $event
      */
-    public function configure(ConfigureFormatter $event)
+    public function configure(Configuring $event)
     {
         $configurator = $event->configurator;
+
+        $configurator->rendering->parameters['PROFILE_URL'] = $this->url->to('forum')->route('user', ['username' => '']);
 
         $tagName = 'USERMENTION';
 
         $tag = $configurator->tags->add($tagName);
         $tag->attributes->add('username');
+        $tag->attributes->add('displayname');
         $tag->attributes->add('id')->filterChain->append('#uint');
-        $tag->attributes['id']->required = false;
 
-        $tag->template = '<a href="{$PROFILE_URL}{@username}" class="UserMention">@<xsl:value-of select="@username"/></a>';
+        $tag->template = '<a href="{$PROFILE_URL}{@username}" class="UserMention">@<xsl:value-of select="@displayname"/></a>';
         $tag->filterChain->prepend([static::class, 'addId'])
-            ->addParameterByName('userRepository')
-            ->setJS('function() { return true; }');
+            ->setJS('function(tag) { return flarum.extensions["flarum-mentions"].filterUserMentions(tag); }');
 
         $configurator->Preg->match('/\B@(?<username>[a-z0-9_-]+)(?!#)/i', $tagName);
     }
 
     /**
-     * @param ConfigureFormatterParser $event
+     * @param Rendering $event
      */
-    public function parse(ConfigureFormatterParser $event)
+    public function render(Rendering $event)
     {
-        $event->parser->registeredVars['userRepository'] = $this->users;
-    }
+        $post = $event->context;
 
-    /**
-     * @param ConfigureFormatterRenderer $event
-     */
-    public function render(ConfigureFormatterRenderer $event)
-    {
-        $event->renderer->setParameter('PROFILE_URL', $this->url->toRoute('user', ['username' => '']));
+        $event->xml = Utils::replaceAttributes($event->xml, 'USERMENTION', function ($attributes) use ($post) {
+            $user = $post->mentionsUsers->find($attributes['id']);
+            if ($user) {
+                $attributes['username'] = $user->username;
+                $attributes['displayname'] = $user->display_name;
+            }
+
+            return $attributes;
+        });
     }
 
     /**
      * @param $tag
-     * @param UserRepository $users
+     *
      * @return bool
      */
-    public static function addId($tag, UserRepository $users)
+    public static function addId($tag)
     {
-        if ($id = $users->getIdForUsername($tag->getAttribute('username'))) {
-            $tag->setAttribute('id', $id);
+        if ($user = User::where('username', 'like', $tag->getAttribute('username'))->first()) {
+            $tag->setAttribute('id', $user->id);
+            $tag->setAttribute('displayname', $user->display_name);
 
             return true;
         }

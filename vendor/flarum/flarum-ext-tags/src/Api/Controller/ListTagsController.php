@@ -11,13 +11,13 @@
 
 namespace Flarum\Tags\Api\Controller;
 
-use Flarum\Api\Controller\AbstractCollectionController;
+use Flarum\Api\Controller\AbstractListController;
 use Flarum\Tags\Api\Serializer\TagSerializer;
 use Flarum\Tags\Tag;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class ListTagsController extends AbstractCollectionController
+class ListTagsController extends AbstractListController
 {
     /**
      * {@inheritdoc}
@@ -35,7 +35,7 @@ class ListTagsController extends AbstractCollectionController
      * {@inheritdoc}
      */
     public $optionalInclude = [
-        'lastDiscussion',
+        'lastPostedDiscussion',
     ];
 
     /**

@@ -11,12 +11,10 @@
 
 namespace Flarum\Subscriptions\Listener;
 
+use Flarum\Discussion\Event\Searching;
 use Flarum\Event\ConfigureDiscussionGambits;
-use Flarum\Event\ConfigureDiscussionSearch;
-use Flarum\Event\ConfigureForumRoutes;
 use Flarum\Subscriptions\Gambit\SubscriptionGambit;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\Query\Expression;
 
 class FilterDiscussionListBySubscription
 {
@@ -26,8 +24,7 @@ class FilterDiscussionListBySubscription
     public function subscribe(Dispatcher $events)
     {
         $events->listen(ConfigureDiscussionGambits::class, [$this, 'addGambit']);
-        $events->listen(ConfigureDiscussionSearch::class, [$this, 'filterIgnored']);
-        $events->listen(ConfigureForumRoutes::class, [$this, 'addRoutes']);
+        $events->listen(Searching::class, [$this, 'filterIgnored']);
     }
 
     /**
@@ -39,28 +36,20 @@ class FilterDiscussionListBySubscription
     }
 
     /**
-     * @param ConfigureDiscussionSearch $event
+     * @param Searching $event
      */
-    public function filterIgnored(ConfigureDiscussionSearch $event)
+    public function filterIgnored(Searching $event)
     {
         if (! $event->criteria->query) {
             // might be better as `id IN (subquery)`?
             $actor = $event->search->getActor();
             $event->search->getQuery()->whereNotExists(function ($query) use ($actor) {
                 $query->selectRaw(1)
-                      ->from('users_discussions')
-                      ->where('discussions.id', new Expression('discussion_id'))
+                      ->from('discussion_user')
+                      ->whereColumn('discussions.id', 'discussion_id')
                       ->where('user_id', $actor->id)
                       ->where('subscription', 'ignore');
             });
         }
-    }
-
-    /**
-     * @param ConfigureForumRoutes $event
-     */
-    public function addRoutes(ConfigureForumRoutes $event)
-    {
-        $event->get('/following', 'following');
     }
 }

@@ -11,9 +11,8 @@
 
 namespace Flarum\Subscriptions\Gambit;
 
-use Flarum\Core\Search\AbstractRegexGambit;
-use Flarum\Core\Search\AbstractSearch;
-use Illuminate\Database\Query\Expression;
+use Flarum\Search\AbstractRegexGambit;
+use Flarum\Search\AbstractSearch;
 
 class SubscriptionGambit extends AbstractRegexGambit
 {
@@ -32,9 +31,9 @@ class SubscriptionGambit extends AbstractRegexGambit
         // might be better as `id IN (subquery)`?
         $method = $negate ? 'whereNotExists' : 'whereExists';
         $search->getQuery()->$method(function ($query) use ($actor, $matches) {
-            $query->select(app('flarum.db')->raw(1))
-                  ->from('users_discussions')
-                  ->where('discussions.id', new Expression('discussion_id'))
+            $query->selectRaw('1')
+                  ->from('discussion_user')
+                  ->whereColumn('discussions.id', 'discussion_id')
                   ->where('user_id', $actor->id)
                   ->where('subscription', $matches[1] === 'follow' ? 'follow' : 'ignore');
         });
