@@ -2054,17 +2054,17 @@
     },
     {
         "name": "s9e/text-formatter",
-        "version": "1.4.0",
-        "version_normalized": "1.4.0.0",
+        "version": "1.4.1",
+        "version_normalized": "1.4.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/s9e/TextFormatter.git",
-            "reference": "c1592976aada52201970d4dede8c3690dab195aa"
+            "reference": "45c8a3845aa791b7da720fa13e6ee18ec49bf795"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/s9e/TextFormatter/zipball/c1592976aada52201970d4dede8c3690dab195aa",
-            "reference": "c1592976aada52201970d4dede8c3690dab195aa",
+            "url": "https://api.github.com/repos/s9e/TextFormatter/zipball/45c8a3845aa791b7da720fa13e6ee18ec49bf795",
+            "reference": "45c8a3845aa791b7da720fa13e6ee18ec49bf795",
             "shasum": ""
         },
         "require": {
@@ -2087,7 +2087,7 @@
             "ext-xsl": "Enables the XSLT renderer",
             "ext-zlib": "Enables gzip compression when scraping content via the MediaEmbed plugin"
         },
-        "time": "2019-02-01T14:29:32+00:00",
+        "time": "2019-03-09T15:49:02+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
