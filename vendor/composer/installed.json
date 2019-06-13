@@ -1076,6 +1076,43 @@
         ]
     },
     {
+        "name": "components/font-awesome",
+        "version": "5.9.0",
+        "version_normalized": "5.9.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/components/font-awesome.git",
+            "reference": "1be57c473b964c8130f2dbd9edc4f64db5394114"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/components/font-awesome/zipball/1be57c473b964c8130f2dbd9edc4f64db5394114",
+            "reference": "1be57c473b964c8130f2dbd9edc4f64db5394114",
+            "shasum": ""
+        },
+        "time": "2019-06-07T02:02:10+00:00",
+        "type": "component",
+        "extra": {
+            "component": {
+                "styles": [
+                    "css/all.css"
+                ],
+                "files": [
+                    "css/all.min.css",
+                    "webfonts/*"
+                ]
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "CC-BY-4.0",
+            "MIT",
+            "OFL-1.1"
+        ],
+        "description": "Font Awesome, the iconic SVG, font, and CSS framework."
+    },
+    {
         "name": "axy/backtrace",
         "version": "1.0.7",
         "version_normalized": "1.0.7.0",
@@ -1401,17 +1438,17 @@
     },
     {
         "name": "zendframework/zend-stratigility",
-        "version": "3.1.0",
-        "version_normalized": "3.1.0.0",
+        "version": "3.2.0",
+        "version_normalized": "3.2.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/zendframework/zend-stratigility.git",
-            "reference": "2ef1189a1c6d42647e9a018fcb4e35c5f8b9884f"
+            "reference": "880c4a72de84e07c406bccee6f5bf32fce950abf"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/zendframework/zend-stratigility/zipball/2ef1189a1c6d42647e9a018fcb4e35c5f8b9884f",
-            "reference": "2ef1189a1c6d42647e9a018fcb4e35c5f8b9884f",
+            "url": "https://api.github.com/repos/zendframework/zend-stratigility/zipball/880c4a72de84e07c406bccee6f5bf32fce950abf",
+            "reference": "880c4a72de84e07c406bccee6f5bf32fce950abf",
             "shasum": ""
         },
         "require": {
@@ -1433,12 +1470,12 @@
         "suggest": {
             "psr/http-message-implementation": "Please install a psr/http-message-implementation to consume Stratigility; e.g., zendframework/zend-diactoros"
         },
-        "time": "2019-02-06T18:17:09+00:00",
+        "time": "2019-06-12T15:22:39+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "3.1.x-dev",
-                "dev-develop": "3.2.x-dev"
+                "dev-master": "3.2.x-dev",
+                "dev-develop": "3.3.x-dev"
             }
         },
         "installation-source": "dist",
@@ -4492,60 +4529,23 @@
         ]
     },
     {
-        "name": "components/font-awesome",
-        "version": "5.9.0",
-        "version_normalized": "5.9.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/components/font-awesome.git",
-            "reference": "1be57c473b964c8130f2dbd9edc4f64db5394114"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/components/font-awesome/zipball/1be57c473b964c8130f2dbd9edc4f64db5394114",
-            "reference": "1be57c473b964c8130f2dbd9edc4f64db5394114",
-            "shasum": ""
-        },
-        "time": "2019-06-07T02:02:10+00:00",
-        "type": "component",
-        "extra": {
-            "component": {
-                "styles": [
-                    "css/all.css"
-                ],
-                "files": [
-                    "css/all.min.css",
-                    "webfonts/*"
-                ]
-            }
-        },
-        "installation-source": "dist",
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "CC-BY-4.0",
-            "MIT",
-            "OFL-1.1"
-        ],
-        "description": "Font Awesome, the iconic SVG, font, and CSS framework."
-    },
-    {
         "name": "flarum/core",
-        "version": "v0.1.0-beta.8.1",
-        "version_normalized": "0.1.0.0-beta8.1",
+        "version": "v0.1.0-beta.8.2",
+        "version_normalized": "0.1.0.0-beta8.2",
         "source": {
             "type": "git",
             "url": "https://github.com/flarum/core.git",
-            "reference": "bbe62f400fd849f1f86ce7a4931c59fab4aec6fc"
+            "reference": "34079108c8426a47a1b3faef8f6b573043c92e4e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/flarum/core/zipball/bbe62f400fd849f1f86ce7a4931c59fab4aec6fc",
-            "reference": "bbe62f400fd849f1f86ce7a4931c59fab4aec6fc",
+            "url": "https://api.github.com/repos/flarum/core/zipball/34079108c8426a47a1b3faef8f6b573043c92e4e",
+            "reference": "34079108c8426a47a1b3faef8f6b573043c92e4e",
             "shasum": ""
         },
         "require": {
             "axy/sourcemap": "^0.1.4",
-            "components/font-awesome": "^5.4.2",
+            "components/font-awesome": "5.9.*",
             "dflydev/fig-cookies": "^1.0.2",
             "doctrine/dbal": "^2.7",
             "franzl/whoops-middleware": "^0.4.0",
@@ -4591,7 +4591,7 @@
             "mockery/mockery": "^0.9.4",
             "phpunit/phpunit": "^6.0"
         },
-        "time": "2018-12-05T23:47:38+00:00",
+        "time": "2019-06-12T14:12:01+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
