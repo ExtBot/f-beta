@@ -5078,14 +5078,14 @@
         "authors": [
             {
                 "name": "Alex Bilbie",
+                "role": "Developer",
                 "email": "hello@alexbilbie.com",
-                "homepage": "http://www.alexbilbie.com",
-                "role": "Developer"
+                "homepage": "http://www.alexbilbie.com"
             },
             {
                 "name": "Woody Gilk",
-                "homepage": "https://github.com/shadowhand",
-                "role": "Contributor"
+                "role": "Contributor",
+                "homepage": "https://github.com/shadowhand"
             }
         ],
         "description": "OAuth 2.0 Client Library",
