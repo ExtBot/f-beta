@@ -207,7 +207,7 @@ class Local extends AbstractAdapter
 
         $result = compact('type', 'path', 'size', 'contents');
 
-        if ($mimetype = Util::guessMimeType($path, $contents)) {
+        if ($mimetype = $config->get('mimetype') ?: Util::guessMimeType($path, $contents)) {
             $result['mimetype'] = $mimetype;
         }
 
@@ -372,11 +372,13 @@ class Local extends AbstractAdapter
         $location = $this->applyPathPrefix($dirname);
         $umask = umask(0);
         $visibility = $config->get('visibility', 'public');
+        $return = ['path' => $dirname, 'type' => 'dir'];
 
-        if ( ! is_dir($location) && ! mkdir($location, $this->permissionMap['dir'][$visibility], true)) {
-            $return = false;
-        } else {
-            $return = ['path' => $dirname, 'type' => 'dir'];
+        if ( ! is_dir($location)) {
+            if (false === @mkdir($location, $this->permissionMap['dir'][$visibility], true)
+                || false === is_dir($location)) {
+                $return = false;
+            }
         }
 
         umask($umask);
