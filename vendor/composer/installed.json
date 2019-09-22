@@ -5364,9 +5364,9 @@
         "authors": [
             {
                 "name": "Ben Corlett",
-                "role": "Developer",
                 "email": "bencorlett@me.com",
-                "homepage": "http://www.webcomm.com.au"
+                "homepage": "http://www.webcomm.com.au",
+                "role": "Developer"
             }
         ],
         "description": "OAuth 1.0 Client Library",
