@@ -276,17 +276,17 @@
     },
     {
         "name": "doctrine/cache",
-        "version": "1.8.2",
-        "version_normalized": "1.8.2.0",
+        "version": "1.9.0",
+        "version_normalized": "1.9.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/doctrine/cache.git",
-            "reference": "cf73f063172f4ec18b6cbb293e30363e11e8d30a"
+            "reference": "c15dcd24b756f9e52ea7c3ae8227354f3628f11a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/doctrine/cache/zipball/cf73f063172f4ec18b6cbb293e30363e11e8d30a",
-            "reference": "cf73f063172f4ec18b6cbb293e30363e11e8d30a",
+            "url": "https://api.github.com/repos/doctrine/cache/zipball/c15dcd24b756f9e52ea7c3ae8227354f3628f11a",
+            "reference": "c15dcd24b756f9e52ea7c3ae8227354f3628f11a",
             "shasum": ""
         },
         "require": {
@@ -297,7 +297,7 @@
         },
         "require-dev": {
             "alcaeus/mongo-php-adapter": "^1.1",
-            "doctrine/coding-standard": "^4.0",
+            "doctrine/coding-standard": "^6.0",
             "mongodb/mongodb": "^1.1",
             "phpunit/phpunit": "^7.0",
             "predis/predis": "~1.0"
@@ -305,11 +305,11 @@
         "suggest": {
             "alcaeus/mongo-php-adapter": "Required to use legacy MongoDB driver"
         },
-        "time": "2019-11-11T01:40:42+00:00",
+        "time": "2019-11-11T10:31:52+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.8.x-dev"
+                "dev-master": "1.9.x-dev"
             }
         },
         "installation-source": "dist",
@@ -344,11 +344,19 @@
                 "email": "schmittjoh@gmail.com"
             }
         ],
-        "description": "Caching library offering an object-oriented API for many cache backends",
-        "homepage": "https://www.doctrine-project.org",
+        "description": "PHP Doctrine Cache library is a popular cache implementation that supports many different drivers such as redis, memcache, apc, mongodb and others.",
+        "homepage": "https://www.doctrine-project.org/projects/cache.html",
         "keywords": [
+            "abstraction",
+            "apcu",
             "cache",
-            "caching"
+            "caching",
+            "couchdb",
+            "memcached",
+            "php",
+            "redis",
+            "riak",
+            "xcache"
         ]
     },
     {
@@ -4799,17 +4807,17 @@
     },
     {
         "name": "symfony/config",
-        "version": "v3.4.33",
-        "version_normalized": "3.4.33.0",
+        "version": "v3.4.34",
+        "version_normalized": "3.4.34.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/config.git",
-            "reference": "c111091db748ed394fd8c3e473a90ad3b80e08ad"
+            "reference": "c3a30587de97263d2813a3c81b74126c58b67a4f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/config/zipball/c111091db748ed394fd8c3e473a90ad3b80e08ad",
-            "reference": "c111091db748ed394fd8c3e473a90ad3b80e08ad",
+            "url": "https://api.github.com/repos/symfony/config/zipball/c3a30587de97263d2813a3c81b74126c58b67a4f",
+            "reference": "c3a30587de97263d2813a3c81b74126c58b67a4f",
             "shasum": ""
         },
         "require": {
@@ -4830,7 +4838,7 @@
         "suggest": {
             "symfony/yaml": "To use the yaml reference dumper"
         },
-        "time": "2019-10-30T12:46:47+00:00",
+        "time": "2019-11-08T08:28:59+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -4865,8 +4873,8 @@
     },
     {
         "name": "symfony/console",
-        "version": "v3.4.33",
-        "version_normalized": "3.4.33.0",
+        "version": "v3.4.34",
+        "version_normalized": "3.4.34.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/console.git",
@@ -4939,8 +4947,8 @@
     },
     {
         "name": "symfony/css-selector",
-        "version": "v4.3.6",
-        "version_normalized": "4.3.6.0",
+        "version": "v4.3.7",
+        "version_normalized": "4.3.7.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/css-selector.git",
@@ -4994,8 +5002,8 @@
     },
     {
         "name": "symfony/debug",
-        "version": "v3.4.33",
-        "version_normalized": "3.4.33.0",
+        "version": "v3.4.34",
+        "version_normalized": "3.4.34.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/debug.git",
@@ -5052,8 +5060,8 @@
     },
     {
         "name": "symfony/filesystem",
-        "version": "v3.4.33",
-        "version_normalized": "3.4.33.0",
+        "version": "v3.4.34",
+        "version_normalized": "3.4.34.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/filesystem.git",
@@ -5104,8 +5112,8 @@
     },
     {
         "name": "symfony/finder",
-        "version": "v3.4.33",
-        "version_normalized": "3.4.33.0",
+        "version": "v3.4.34",
+        "version_normalized": "3.4.34.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/finder.git",
@@ -5155,17 +5163,17 @@
     },
     {
         "name": "symfony/http-foundation",
-        "version": "v3.4.33",
-        "version_normalized": "3.4.33.0",
+        "version": "v3.4.34",
+        "version_normalized": "3.4.34.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/http-foundation.git",
-            "reference": "7b4626ab40d8562707e6d1c9a6fab977a86c2037"
+            "reference": "a5d46a33e8649ba802cebe520d188b04385572a2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/http-foundation/zipball/7b4626ab40d8562707e6d1c9a6fab977a86c2037",
-            "reference": "7b4626ab40d8562707e6d1c9a6fab977a86c2037",
+            "url": "https://api.github.com/repos/symfony/http-foundation/zipball/a5d46a33e8649ba802cebe520d188b04385572a2",
+            "reference": "a5d46a33e8649ba802cebe520d188b04385572a2",
             "shasum": ""
         },
         "require": {
@@ -5176,7 +5184,7 @@
         "require-dev": {
             "symfony/expression-language": "~2.8|~3.0|~4.0"
         },
-        "time": "2019-10-24T15:33:53+00:00",
+        "time": "2019-11-03T02:12:45+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -5575,8 +5583,8 @@
     },
     {
         "name": "symfony/process",
-        "version": "v3.4.33",
-        "version_normalized": "3.4.33.0",
+        "version": "v3.4.34",
+        "version_normalized": "3.4.34.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/process.git",
@@ -5626,8 +5634,8 @@
     },
     {
         "name": "symfony/translation",
-        "version": "v3.4.33",
-        "version_normalized": "3.4.33.0",
+        "version": "v3.4.34",
+        "version_normalized": "3.4.34.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/translation.git",
@@ -5698,8 +5706,8 @@
     },
     {
         "name": "symfony/yaml",
-        "version": "v3.4.33",
-        "version_normalized": "3.4.33.0",
+        "version": "v3.4.34",
+        "version_normalized": "3.4.34.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/yaml.git",

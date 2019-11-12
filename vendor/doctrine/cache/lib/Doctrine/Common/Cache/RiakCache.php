@@ -14,9 +14,9 @@ use function unserialize;
 /**
  * Riak cache provider.
  *
- * @link   www.doctrine-project.org
- *
  * @deprecated
+ *
+ * @link   www.doctrine-project.org
  */
 class RiakCache extends CacheProvider
 {
@@ -47,7 +47,7 @@ class RiakCache extends CacheProvider
             }
 
             // Check for attempted siblings
-            $object = ($response->hasSiblings())
+            $object = $response->hasSiblings()
                 ? $this->resolveConflict($id, $response->getVClock(), $response->getObjectList())
                 : $response->getFirstObject();
 
