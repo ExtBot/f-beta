@@ -4181,7 +4181,8 @@
             "lesscss",
             "php",
             "stylesheet"
-        ]
+        ],
+        "abandoned": true
     },
     {
         "name": "paragonie/random_compat",
