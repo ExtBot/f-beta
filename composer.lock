@@ -138,16 +138,16 @@
         },
         {
             "name": "axy/sourcemap",
-            "version": "0.1.4",
+            "version": "0.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/axypro/sourcemap.git",
-                "reference": "f5793e5d166bf2a1735e27676007a21c121e20af"
+                "reference": "95a52df5a08c3a011031dae2e79390134e28467c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/axypro/sourcemap/zipball/f5793e5d166bf2a1735e27676007a21c121e20af",
-                "reference": "f5793e5d166bf2a1735e27676007a21c121e20af",
+                "url": "https://api.github.com/repos/axypro/sourcemap/zipball/95a52df5a08c3a011031dae2e79390134e28467c",
+                "reference": "95a52df5a08c3a011031dae2e79390134e28467c",
                 "shasum": ""
             },
             "require": {
@@ -180,7 +180,7 @@
                 "javascript",
                 "sourcemap"
             ],
-            "time": "2018-04-16T13:23:46+00:00"
+            "time": "2020-08-20T09:49:44+00:00"
         },
         {
             "name": "components/font-awesome",
