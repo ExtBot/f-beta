@@ -5,7 +5,6 @@ namespace League\OAuth1\Client\Tests;
 use League\OAuth1\Client\Signature\PlainTextSignature;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_TestCase;
 
 class PlainTextSignatureTest extends TestCase
 {
@@ -30,6 +29,7 @@ class PlainTextSignatureTest extends TestCase
     {
         $clientCredentials = m::mock('League\OAuth1\Client\Credentials\ClientCredentialsInterface');
         $clientCredentials->shouldReceive('getSecret')->andReturn('clientsecret');
+
         return $clientCredentials;
     }
 
@@ -37,6 +37,7 @@ class PlainTextSignatureTest extends TestCase
     {
         $credentials = m::mock('League\OAuth1\Client\Credentials\CredentialsInterface');
         $credentials->shouldReceive('getSecret')->andReturn('tokensecret');
+
         return $credentials;
     }
 }
