@@ -360,17 +360,17 @@
     },
     {
         "name": "doctrine/dbal",
-        "version": "2.11.2",
-        "version_normalized": "2.11.2.0",
+        "version": "2.11.3",
+        "version_normalized": "2.11.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/doctrine/dbal.git",
-            "reference": "b88a45cbc395e850b2d958dcd7b9d49d09ff23e0"
+            "reference": "fb5d5f2f26babf8dce217b1eb88300c22bb703a4"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/doctrine/dbal/zipball/b88a45cbc395e850b2d958dcd7b9d49d09ff23e0",
-            "reference": "b88a45cbc395e850b2d958dcd7b9d49d09ff23e0",
+            "url": "https://api.github.com/repos/doctrine/dbal/zipball/fb5d5f2f26babf8dce217b1eb88300c22bb703a4",
+            "reference": "fb5d5f2f26babf8dce217b1eb88300c22bb703a4",
             "shasum": ""
         },
         "require": {
@@ -391,7 +391,7 @@
         "suggest": {
             "symfony/console": "For helpful console commands such as SQL execution and import of files."
         },
-        "time": "2020-10-19T02:01:37+00:00",
+        "time": "2020-10-20T14:36:48+00:00",
         "bin": [
             "bin/doctrine-dbal"
         ],
@@ -839,17 +839,17 @@
     },
     {
         "name": "filp/whoops",
-        "version": "2.8.0",
-        "version_normalized": "2.8.0.0",
+        "version": "2.9.0",
+        "version_normalized": "2.9.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/filp/whoops.git",
-            "reference": "fa50d9db1c0c2fae99cf988d27023effda5524a3"
+            "reference": "2ec31f3adc54c71a59c5e3c2143d7a0e2f8899f8"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/filp/whoops/zipball/fa50d9db1c0c2fae99cf988d27023effda5524a3",
-            "reference": "fa50d9db1c0c2fae99cf988d27023effda5524a3",
+            "url": "https://api.github.com/repos/filp/whoops/zipball/2ec31f3adc54c71a59c5e3c2143d7a0e2f8899f8",
+            "reference": "2ec31f3adc54c71a59c5e3c2143d7a0e2f8899f8",
             "shasum": ""
         },
         "require": {
@@ -865,7 +865,7 @@
             "symfony/var-dumper": "Pretty print complex values better with var-dumper available",
             "whoops/soap": "Formats errors as SOAP responses"
         },
-        "time": "2020-10-17T09:00:00+00:00",
+        "time": "2020-10-20T12:00:00+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
