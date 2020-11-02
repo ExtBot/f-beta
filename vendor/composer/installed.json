@@ -839,17 +839,17 @@
     },
     {
         "name": "filp/whoops",
-        "version": "2.9.0",
-        "version_normalized": "2.9.0.0",
+        "version": "2.9.1",
+        "version_normalized": "2.9.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/filp/whoops.git",
-            "reference": "2ec31f3adc54c71a59c5e3c2143d7a0e2f8899f8"
+            "reference": "307fb34a5ab697461ec4c9db865b20ff2fd40771"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/filp/whoops/zipball/2ec31f3adc54c71a59c5e3c2143d7a0e2f8899f8",
-            "reference": "2ec31f3adc54c71a59c5e3c2143d7a0e2f8899f8",
+            "url": "https://api.github.com/repos/filp/whoops/zipball/307fb34a5ab697461ec4c9db865b20ff2fd40771",
+            "reference": "307fb34a5ab697461ec4c9db865b20ff2fd40771",
             "shasum": ""
         },
         "require": {
@@ -865,7 +865,7 @@
             "symfony/var-dumper": "Pretty print complex values better with var-dumper available",
             "whoops/soap": "Formats errors as SOAP responses"
         },
-        "time": "2020-10-20T12:00:00+00:00",
+        "time": "2020-11-01T12:00:00+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
