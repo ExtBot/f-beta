@@ -1025,7 +1025,7 @@
                 "dev-master": "0.1.x-dev"
             }
         },
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "psr-4": {
                 "Flarum\\": "src/"
